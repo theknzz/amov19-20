@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".PlayMenu">
 
     <TextView
-        android:id="@+id/logo"
+        android:id="@+id/logo2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
         android:text="Sudoku/Logo"
         android:textSize="50sp"
         android:textStyle="bold"
@@ -20,54 +18,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvSubMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play Menu"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/btnPlay"
+            android:id="@+id/btnMode1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:onClick="onPlay"
-            android:text="Jogar" />
+            android:onClick="onMode"
+            android:text="Mode 1" />
 
         <Button
-            android:id="@+id/btnHistory"
+            android:id="@+id/btnMode2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:onClick="onHistory"
-            android:text="Histórico" />
+            android:onClick="onMode"
+            android:text="Mode 2" />
 
         <Button
-            android:id="@+id/btnSettings"
+            android:id="@+id/btnMode3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:onClick="onSettings"
-            android:text="Definições" />
+            android:onClick="onMode"
+            android:text="Mode 3" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
