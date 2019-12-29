@@ -27,12 +27,16 @@ public class Gameplay extends AppCompatActivity {
         tvMode.setText("Modo " + getIntent().getIntExtra("mode", 0));
 
         FrameLayout flSudokuTable = findViewById(R.id.flSudokuTable);
-        board = new GameBoard(this, getIntent().getIntExtra("level", 0));
+        board = new GameBoard(this, getIntent().getIntExtra("level", 0), tvMode);
         flSudokuTable.addView(board);
     }
 
     public void onNumberPicker(View view) {
         String btnText = ((Button) view).getText().toString();
         board.setSelectedNumber(Integer.parseInt(btnText));
+    }
+
+    public void onNotes(View view) {
+        board.switchNotesMode();
     }
 }

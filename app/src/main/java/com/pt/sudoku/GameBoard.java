@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import pt.isec.ans.sudokulibrary.Sudoku;
@@ -24,30 +21,23 @@ public class GameBoard extends View {
     private int selectedNumber = 0;
     private int level;
     private Context context;
+    private boolean isNotesMode = false;
 
     SudokuBoard board = new SudokuBoard();
-
-//    int [][] board = new int[][] {
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-//    };
-
+    SudokuBoard gameSolution = new SudokuBoard();
+    SudokuClock clock = null;
 
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
 
-    public GameBoard(Context context, int level) {
+    public GameBoard(Context context, int level, TextView tvClock) {
         super(context);
         this.context = context;
         this.level = level;
+        this.clock = new SudokuClock(tvClock);
         createPaints();
         initializeGame(level);
+        resolveGame(board.toPrimitiveBoard());
+        clock.startClock();
     }
 
     public void createPaints() {
@@ -56,7 +46,6 @@ public class GameBoard extends View {
         paintMainLines.setColor(Color.BLACK);
         paintMainLines.setStrokeWidth(8);
 
-        // para evitar repetir tudo
         paintSubLines = new Paint(paintMainLines);
         paintSubLines.setStrokeWidth(3);
 
@@ -91,11 +80,14 @@ public class GameBoard extends View {
 
         for (int r =0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
-                int n = board.getValueOf(r,c);
+                SudokuCell cell = board.get(r,c);
+                int n = cell.getValue();
                 if (n != 0) {
                     int x = c * cellW + cellW / 2;
                     int y = r * cellH + cellH / 2 + cellH / 6;
-                    if (!isAccordingToRules(r,c,n)) {
+                    if (!isAccordingToRules(r,c,n) || !endsInAPossibleWin(r,c,n)) {
+                        SudokuClock wrongCellClock = new SudokuClock(board.get(r, c), this);
+                        wrongCellClock.startClock();
                         paintMainNumbers.setColor(Color.RED);
                         canvas.drawText("" + n, x, y, paintMainNumbers);
                     } else {
@@ -103,8 +95,47 @@ public class GameBoard extends View {
                         canvas.drawText("" + n, x, y, paintMainNumbers);
                     }
                 }
+                else {
+                    if (cell.hasNotes()) {
+                        int x = c * cellW + cellW / 6;
+                        int y = r * cellH + cellH / 6;
+                        List<Integer> notes = cell.getNotes();
+                        for (int p = 1; p <= BOARD_SIZE; p++) {
+                            if (notes.contains(p)) {
+                                int xp = x + (p - 1) % 3 * cellW / 3;
+                                int yp = y + (p - 1) / 3 * cellH / 3 + cellH / 9;
+                                canvas.drawText(""+p, xp, yp, paintSmallNumbers);
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private void updateNotes(int r, int c) {
+        updateRowNotes(r);
+        updateColumnNotes(c);
+        updateBlockNotes(r,c);
+    }
+
+    private void updateBlockNotes(int r, int c) {
+        int row = r - r % 3;
+        int col = c - c % 3;
+
+        for (int i = row; i < row + 3; i++)
+            for (int j = col; j < col + 3; j++)
+               board.get(i,j).removeInvalidNotes(validNotes(i,j));
+    }
+
+    private void updateColumnNotes(int c) {
+        for (int i=0; i < BOARD_SIZE; i++)
+            board.get(i, c).removeInvalidNotes(validNotes(i,c));
+    }
+
+    private void updateRowNotes(int r) {
+        for (int i=0; i < BOARD_SIZE; i++)
+            board.get(r, i).removeInvalidNotes(validNotes(r,i));
     }
 
     @Override
@@ -121,10 +152,16 @@ public class GameBoard extends View {
             int cellY = px / cellW;
             int cellX = py / cellH;
 
-            if (!board.setValue(cellX, cellY,selectedNumber))
-                Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
-            else
-                invalidate();
+            if (!isNotesMode) {
+                if (!board.setValue(cellX, cellY, selectedNumber))
+                    Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
+                else
+                    updateNotes(cellX,cellY);
+            } else {
+                board.addNote(cellX, cellY, selectedNumber);
+            }
+
+            invalidate();
         }
         return super.onTouchEvent(event);
     }
@@ -134,31 +171,23 @@ public class GameBoard extends View {
     }
 
     private boolean hasDoubledInSameBlock(int row, int col, int number) {
-        int r = row - row % 3;
-        int c = col - col % 3;
-
-        for (int i = r; i < r + 3; i++)
-            for (int j = c; j < c + 3; j++)
-                if (board.getValueOf(i,j) == number && (i!=row && j!=col))
-                    return true;
-        return false;
+        return board.hasDoubledInSameBlock(row, col, number);
     }
 
     private boolean hasDoubledInSameColumn(int row, int column, int number) {
-        for (int r=0; r < BOARD_SIZE; r++)
-        {
-            if (r!=row)
-                if (board.getValueOf(r,column)==number) return true;
-        }
-        return false;
+       return board.hasDoubledInSameColumn(row, column, number);
     }
 
     private boolean hasDoubledInSameRow(int row, int column, int number) {
-        for (int c=0; c < BOARD_SIZE; c++){
-            if (c!=column)
-                if (board.getValueOf(row,c)==number) return true;
-        }
-        return false;
+       return board.hasDoubledInSameRow(row, column, number);
+    }
+
+    private boolean endsInAPossibleWin(int row, int col, int number) {
+        return gameSolution.getValueOf(row, col) == number;
+    }
+
+    private List<Integer> validNotes(int row, int column) {
+        return board.validNotes(row, column);
     }
 
     private void createBoard(int [][] b) {
@@ -202,28 +231,26 @@ public class GameBoard extends View {
         return array;
     }
 
-//    private void resolveGame() {
-//        try {
-//            JSONObject json = new JSONObject();
-//            JSONArray jsonArray = convert(board);
-//            json.put("board", jsonArray);
-//            String strJson = Sudoku.solve(json.toString(), 1000*2);
-//
-//            Log.d("TesteSudoku", "JSON:"+strJson);
-//
-//            try {
-//                json = new JSONObject(strJson);
-//                if (json.optInt("result",0) == 1) {
-//                    jsonArray = json.getJSONArray("board");
-//                    int[][] board = convert(jsonArray);
-//                    setBoard(board);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (Exception e) {
-//        }
-//    }
+    private void resolveGame(int [][] board) {
+        try {
+            JSONObject json = new JSONObject();
+            JSONArray jsonArray = convert(board);
+            json.put("board", jsonArray);
+            String strJson = Sudoku.solve(json.toString(), 1000*2);
+
+            try {
+                json = new JSONObject(strJson);
+                if (json.optInt("result",0) == 1) {
+                    jsonArray = json.getJSONArray("board");
+                    int[][] b = convert(jsonArray);
+                    gameSolution = new SudokuBoard(b);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+        }
+    }
 
     private JSONArray convert(int[][] board) {
         JSONArray jsonArray = new JSONArray();
@@ -245,5 +272,12 @@ public class GameBoard extends View {
 
     public void setSelectedNumber(int selectedNumber) {
         this.selectedNumber = selectedNumber;
+    }
+
+    public void switchNotesMode() {
+        if(isNotesMode)
+            isNotesMode = false;
+        else
+            isNotesMode = true;
     }
 }

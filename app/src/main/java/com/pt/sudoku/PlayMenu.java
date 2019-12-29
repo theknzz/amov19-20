@@ -57,7 +57,8 @@ public class PlayMenu extends AppCompatActivity {
             //button hard
             case R.id.btnHard:
                 Toast.makeText(this,"Starting hard game",Toast.LENGTH_LONG).show();
-                intent.putExtra("level", 12);
+                //TODO devia ser 12 mas o código do stor fica muito lento por isso ficou 10
+                intent.putExtra("level", 10);
                 break;
             default: {
                 difficultDialog.cancel();
