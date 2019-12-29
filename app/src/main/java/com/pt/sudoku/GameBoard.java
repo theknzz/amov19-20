@@ -7,9 +7,14 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pt.isec.ans.sudokulibrary.Sudoku;
 
@@ -17,24 +22,32 @@ public class GameBoard extends View {
 
     public static final int BOARD_SIZE = 9;
     private int selectedNumber = 0;
-    int [][] board = new int[][] {
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
-    };
+    private int level;
+    private Context context;
+
+    SudokuBoard board = new SudokuBoard();
+
+//    int [][] board = new int[][] {
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//            {0 , 0, 0, 0, 0 ,0, 0, 0, 0},
+//    };
 
 
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
 
-    public GameBoard(Context context) {
+    public GameBoard(Context context, int level) {
         super(context);
+        this.context = context;
+        this.level = level;
         createPaints();
+        initializeGame(level);
     }
 
     public void createPaints() {
@@ -78,7 +91,7 @@ public class GameBoard extends View {
 
         for (int r =0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
-                int n = board[r][c];
+                int n = board.getValueOf(r,c);
                 if (n != 0) {
                     int x = c * cellW + cellW / 2;
                     int y = r * cellH + cellH / 2 + cellH / 6;
@@ -108,8 +121,10 @@ public class GameBoard extends View {
             int cellY = px / cellW;
             int cellX = py / cellH;
 
-            board[cellX][cellY] = 8;
-            invalidate();
+            if (!board.setValue(cellX, cellY,selectedNumber))
+                Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
+            else
+                invalidate();
         }
         return super.onTouchEvent(event);
     }
@@ -124,7 +139,7 @@ public class GameBoard extends View {
 
         for (int i = r; i < r + 3; i++)
             for (int j = c; j < c + 3; j++)
-                if (board[i][j] == number && (i!=row && j!=col))
+                if (board.getValueOf(i,j) == number && (i!=row && j!=col))
                     return true;
         return false;
     }
@@ -133,7 +148,7 @@ public class GameBoard extends View {
         for (int r=0; r < BOARD_SIZE; r++)
         {
             if (r!=row)
-                if (board[r][column]==number) return true;
+                if (board.getValueOf(r,column)==number) return true;
         }
         return false;
     }
@@ -141,19 +156,26 @@ public class GameBoard extends View {
     private boolean hasDoubledInSameRow(int row, int column, int number) {
         for (int c=0; c < BOARD_SIZE; c++){
             if (c!=column)
-                if (board[row][c]==number) return true;
+                if (board.getValueOf(row,c)==number) return true;
         }
         return false;
     }
 
-    private void initializeGame() {
-        String strJson = Sudoku.generate(7);
+    private void createBoard(int [][] b) {
+        for (int i=0; i < BOARD_SIZE; i++)
+            for (int j=0; j <BOARD_SIZE; j++) {
+                board.addToInitialBoard(i,j, b[i][j]);
+            }
+    }
+
+    private void initializeGame(int level) {
+        String strJson = Sudoku.generate(level);
         try {
             JSONObject json = new JSONObject(strJson);
             if (json.optInt("result",0) == 1) {
                 JSONArray jsonArray = json.getJSONArray("board");
                 int[][] board = convert(jsonArray);
-                setBoard(board);
+                createBoard(board);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -180,28 +202,28 @@ public class GameBoard extends View {
         return array;
     }
 
-    private void resolveGame() {
-        try {
-            JSONObject json = new JSONObject();
-            JSONArray jsonArray = convert(board);
-            json.put("board", jsonArray);
-            String strJson = Sudoku.solve(json.toString(), 1000*2);
-
-            Log.d("TesteSudoku", "JSON:"+strJson);
-
-            try {
-                json = new JSONObject(strJson);
-                if (json.optInt("result",0) == 1) {
-                    jsonArray = json.getJSONArray("board");
-                    int[][] board = convert(jsonArray);
-                    setBoard(board);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-        }
-    }
+//    private void resolveGame() {
+//        try {
+//            JSONObject json = new JSONObject();
+//            JSONArray jsonArray = convert(board);
+//            json.put("board", jsonArray);
+//            String strJson = Sudoku.solve(json.toString(), 1000*2);
+//
+//            Log.d("TesteSudoku", "JSON:"+strJson);
+//
+//            try {
+//                json = new JSONObject(strJson);
+//                if (json.optInt("result",0) == 1) {
+//                    jsonArray = json.getJSONArray("board");
+//                    int[][] board = convert(jsonArray);
+//                    setBoard(board);
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (Exception e) {
+//        }
+//    }
 
     private JSONArray convert(int[][] board) {
         JSONArray jsonArray = new JSONArray();
@@ -219,5 +241,9 @@ public class GameBoard extends View {
 
         }
         return jsonArray;
+    }
+
+    public void setSelectedNumber(int selectedNumber) {
+        this.selectedNumber = selectedNumber;
     }
 }
