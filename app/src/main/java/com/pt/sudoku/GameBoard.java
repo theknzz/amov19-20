@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pt.isec.ans.sudokulibrary.Sudoku;
+
 public class GameBoard extends View {
 
     public static final int BOARD_SIZE = 9;

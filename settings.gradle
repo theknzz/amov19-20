@@ -1,2 +1,2 @@
-include ':app', ':LibrarySudoku'
+include ':app', ':sudokulibrary'
 rootProject.name='Sudoku'
