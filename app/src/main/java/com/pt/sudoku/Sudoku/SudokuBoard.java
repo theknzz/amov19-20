@@ -1,6 +1,6 @@
-package com.pt.sudoku;
+package com.pt.sudoku.Sudoku;
 
-import android.widget.Toast;
+import com.pt.sudoku.PlayerContents.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +56,10 @@ public class SudokuBoard {
     }
 
     public boolean setValue(int row, int col, int value, PlayerManager manager) {
+        if (!isValidInsert(row, col, value)) return false;
         if (isAgainstRules(row,col,value)){
             manager.addWrongGuessToActualPlayer();
-            return false;
+            return get(row,col).setValue(value);
         }
         manager.addRightGuessToActualPlayer();
         return get(row,col).setValue(value);

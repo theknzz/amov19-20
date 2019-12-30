@@ -1,5 +1,6 @@
-package com.pt.sudoku;
+package com.pt.sudoku.Sudoku;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,13 +9,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.pt.sudoku.Clock.Clock;
+import com.pt.sudoku.Clock.SudokuClock;
+import com.pt.sudoku.PlayerContents.Player;
+import com.pt.sudoku.PlayerContents.PlayerManager;
+import com.pt.sudoku.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 import pt.isec.ans.sudokulibrary.Sudoku;
 
-public class GameBoard extends View {
+public class BoardView extends View {
 
     public static final int BOARD_SIZE = 9;
     private int selectedNumber = 0;
@@ -24,43 +31,104 @@ public class GameBoard extends View {
 
     private SudokuBoard board = new SudokuBoard();
     private SudokuBoard gameSolution = new SudokuBoard();
+
     private SudokuClock clock = null;
-    private SudokuClock playerClock = null;
 
     private PlayerManager playerManager;
     private int gameMode;
 
+    private Clock globalClock, personalClock, wrongClock;
+
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
+    private TextView tvWinOutput, tvClock;
+    private Dialog winDialog;
 
-    private TextView tvPlayerClock, tvPlayer, tvClock;
 
-
-    public GameBoard(Context context, int level, TextView tvClock) {
+    public BoardView(Context context, int level, TextView tvClock, TextView tvWinOutput) {
         super(context);
         this.gameMode = 1;
         this.context = context;
         this.level = level;
-        this.clock = new SudokuClock(tvClock);
+        this.globalClock = new Clock();
+        this.personalClock = new Clock();
+        this.wrongClock = new Clock();
+        this.tvClock=tvClock;
+        this.clock = new SudokuClock(tvClock, globalClock);
+        this.winDialog = new Dialog(context);
+        this.tvWinOutput = tvWinOutput;
+        winDialog.setContentView(R.layout.pop_up_win);
         createPaints();
         initializeGame(level);
         resolveGame(board.toPrimitiveBoard());
         clock.startClock();
     }
 
-    public GameBoard(Context context, int level, TextView tvClock, TextView tvPlayerClock, TextView tvPlayer) {
+    public BoardView(Context context, int level, TextView tvClock, TextView tvPlayerClock, TextView tvPlayer, TextView tvWinOutput) {
         super(context);
         this.gameMode= 2;
-        this.tvPlayerClock = tvPlayerClock;
-        this.tvPlayer = tvPlayer;
         this.context = context;
         this.level = level;
-        this.clock = new SudokuClock(tvClock);
-        playerManager = new PlayerManager(new Player("A", true), new Player("B"), tvPlayer, tvPlayerClock);
+        this.globalClock = new Clock();
+        this.clock = new SudokuClock(tvClock, globalClock);
+        this.winDialog = new Dialog(context);
+        this.tvWinOutput = tvWinOutput;
+        winDialog.setContentView(R.layout.pop_up_win);
+        this.personalClock = new Clock();
+        this.wrongClock = new Clock();
+        playerManager = new PlayerManager(new Player("A", true), new Player("B"), tvPlayer, tvPlayerClock, personalClock);
         createPaints();
         initializeGame(level);
         resolveGame(board.toPrimitiveBoard());
         clock.startClock();
         playerManager.triggerPlayerClock();
+    }
+
+    public BoardView(BoardView board, Context context, TextView tvClock, TextView tvWinOutput) {
+        super(context);
+        this.context = context;
+        this.gameMode = 1;
+        this.isNotesMode = board.isNotesMode();
+        this.selectedNumber = board.getSelectedNumber();
+        this.context = board.getContext();
+        this.level = board.getLevel();
+        this.globalClock = board.getGlobalClock();
+        this.wrongClock = board.getWrongClock();
+        this.winDialog = board.getWinDialog();
+        this.tvWinOutput = tvWinOutput;
+        this.tvClock = tvClock;
+        winDialog.setContentView(R.layout.pop_up_win);
+        createPaints();
+        this.board = board.getBoard();
+        this.gameSolution = board.getGameSolution();
+        this.clock = new SudokuClock(tvClock, globalClock);
+        clock.startClock();
+    }
+
+    public BoardView(BoardView board, Context context, TextView tvClock, TextView tvPlayerClock, TextView tvPlayer, TextView tvWinOutput) {
+        super(context);
+        this.context = context;
+        this.gameMode= 2;
+        this.tvClock = tvClock;
+        this.tvWinOutput = tvWinOutput;
+        this.selectedNumber = getSelectedNumber();
+        this.isNotesMode = board.isNotesMode();
+        this.level = board.getLevel();
+        this.globalClock = board.getGlobalClock();
+        this.personalClock = board.getPersonalClock();
+        this.wrongClock = board.getWrongClock();
+        this.playerManager = new PlayerManager(board.getPlayerManager(), tvPlayer, tvPlayerClock, personalClock);
+        this.clock = new SudokuClock(tvClock, globalClock);
+        this.winDialog = new Dialog(context);
+        winDialog.setContentView(R.layout.pop_up_win);
+        createPaints();
+        this.board = board.getBoard();
+        this.gameSolution = board.getGameSolution();
+        clock.startClock();
+        playerManager.triggerPlayerClock();
+    }
+
+    private Clock getGlobalClock() {
+        return globalClock;
     }
 
     public void createPaints() {
@@ -109,7 +177,8 @@ public class GameBoard extends View {
                     int x = c * cellW + cellW / 2;
                     int y = r * cellH + cellH / 2 + cellH / 6;
                     if (!isAccordingToRules(r,c,n) || !endsInAPossibleWin(r,c,n)) {
-                        SudokuClock wrongCellClock = new SudokuClock(board.get(r, c), this);
+                        wrongClock = new Clock();
+                        SudokuClock wrongCellClock = new SudokuClock(board.get(r, c), this, wrongClock);
                         wrongCellClock.startClock();
                         paintMainNumbers.setColor(Color.RED);
                         canvas.drawText("" + n, x, y, paintMainNumbers);
@@ -137,10 +206,14 @@ public class GameBoard extends View {
         if (isGameFinished()) {
             if (gameMode==2) {
                 Player p = playerManager.getWinner();
-                Toast.makeText(context, "Player " + p.getName() + " won the game.", Toast.LENGTH_SHORT).show();
+                tvWinOutput.setText("Player won the game (with " + p.getRightGuesses()+ ").");
+                Toast.makeText(context, "Player won the game (with " + p.getRightGuesses()+ ").", Toast.LENGTH_SHORT).show();
+                winDialog.show();
             }
             else if (gameMode==1) {
                 Toast.makeText(context, "Game is over!", Toast.LENGTH_SHORT).show();
+                winDialog.setContentView(R.layout.pop_up_win);
+                winDialog.show();
             }
         }
     }
@@ -330,11 +403,85 @@ public class GameBoard extends View {
 
     public void switchGameMode() {
         gameMode=1;
-        playerManager.lockPlayer(tvClock);
+        playerManager.lockPlayer();
     }
 
     public void cheat() {
         board.setBoard(gameSolution.getBoard());
         invalidate();
+    }
+
+
+    public static int getBoardSize() {
+        return BOARD_SIZE;
+    }
+
+    public int getSelectedNumber() {
+        return selectedNumber;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public boolean isNotesMode() {
+        return isNotesMode;
+    }
+
+    public SudokuBoard getBoard() {
+        return board;
+    }
+
+    public SudokuBoard getGameSolution() {
+        return gameSolution;
+    }
+
+    public SudokuClock getClock() {
+        return clock;
+    }
+
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public Paint getPaintMainLines() {
+        return paintMainLines;
+    }
+
+    public Paint getPaintSubLines() {
+        return paintSubLines;
+    }
+
+    public Paint getPaintMainNumbers() {
+        return paintMainNumbers;
+    }
+
+    public Paint getPaintSmallNumbers() {
+        return paintSmallNumbers;
+    }
+
+    public TextView getTvWinOutput() {
+        return tvWinOutput;
+    }
+
+    public Dialog getWinDialog() {
+        return winDialog;
+    }
+
+    public TextView getTvClock() {
+        return tvClock;
+    }
+
+    public Clock getWrongClock() {
+        return wrongClock;
+    }
+
+    public Clock getPersonalClock() {
+        return personalClock;
     }
 }

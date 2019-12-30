@@ -1,6 +1,6 @@
-package com.pt.sudoku;
+package com.pt.sudoku.PlayerContents;
 
-class Player {
+public class Player {
     private String name;
     private boolean isPlaying=false;
     private int wrongGuesses=0;

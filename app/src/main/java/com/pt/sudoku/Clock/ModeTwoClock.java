@@ -1,22 +1,25 @@
-package com.pt.sudoku;
+package com.pt.sudoku.Clock;
 
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
+import com.pt.sudoku.PlayerContents.PlayerManager;
 
 public class ModeTwoClock implements Runnable {
+    private Clock clock;
     private TextView tvPlayerClock;
     private TextView tvPlayer;
     private PlayerManager manager;
-    private int seconds = 0, limSeconds;
+    private int limSeconds;
     private Handler timerHandler = null;
 
-    public ModeTwoClock(Handler timerHandler,TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds) {
+    public ModeTwoClock(Handler timerHandler,TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds, Clock clock) {
         this.tvPlayerClock = tvPlayerClock;
         this.tvPlayer = tvPlayer;
         this.timerHandler = timerHandler;
         this.manager = manager;
         this.limSeconds = seconds;
+        this.clock = clock;
     }
 
     @Override
@@ -29,18 +32,17 @@ public class ModeTwoClock implements Runnable {
         }
         else if (manager.isPlayerLocked()) timerHandler.removeCallbacksAndMessages(this);
         else {
-            seconds++;
-            seconds = seconds % 60;
-            Log.i("CLOCK", manager.getActualPlayer().getName() + " - time: " + seconds + " of " + limSeconds);
+            clock.incSeconds();
+            Log.i("CLOCK", manager.getActualPlayer().getName() + " - time: " + clock.getSeconds() + " of " + limSeconds);
 
-            if (seconds >= limSeconds) {
+            if (clock.getSeconds() >= limSeconds) {
                 Log.i("CLOCK", manager.getActualPlayer().getName() + " time limit reached");
                 manager.switchPlayerTurn();
-                seconds = 0;
+                clock.resetSeconds();
                 timerHandler.removeCallbacksAndMessages(this);
                 return;
             } else {
-                tvPlayerClock.setText(String.format("PlayerTimer: %02d", seconds));
+                tvPlayerClock.setText(String.format("PlayerTimer: %02d", clock.getSeconds()));
             }
             timerHandler.postDelayed(this, 1000);
         }
