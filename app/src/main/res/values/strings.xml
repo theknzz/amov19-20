@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sudoku</string>
+    <string name="photo_location">/profilePicture.jpg</string>
 </resources>
