@@ -1,10 +1,9 @@
 package com.pt.sudoku;
 
-import java.lang.reflect.Array;
+import android.widget.Toast;
+
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SudokuBoard {
     private final int BOARD_SIZE = 9;
@@ -53,6 +52,19 @@ public class SudokuBoard {
     public boolean setValue(int row, int col, int value) {
         if (!isValidInsert(row, col, value)) return false;
         return get(row,col).setValue(value);
+    }
+
+    public boolean setValue(int row, int col, int value, PlayerManager manager) {
+        if (isAgainstRules(row,col,value)){
+            manager.addWrongGuessToActualPlayer();
+            return false;
+        }
+        manager.addRightGuessToActualPlayer();
+        return get(row,col).setValue(value);
+    }
+
+    private boolean isAgainstRules(int row, int col, int value) {
+        return hasDoubledInSameBlock(row, col, value) || hasDoubledInSameColumn(row, col, value) || hasDoubledInSameRow(row, col, value);
     }
 
     public boolean hasDoubledInSameRow(int row, int column, int number) {

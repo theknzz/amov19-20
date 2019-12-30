@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
-
 import pt.isec.ans.sudokulibrary.Sudoku;
 
 public class GameBoard extends View {
@@ -23,14 +22,22 @@ public class GameBoard extends View {
     private Context context;
     private boolean isNotesMode = false;
 
-    SudokuBoard board = new SudokuBoard();
-    SudokuBoard gameSolution = new SudokuBoard();
-    SudokuClock clock = null;
+    private SudokuBoard board = new SudokuBoard();
+    private SudokuBoard gameSolution = new SudokuBoard();
+    private SudokuClock clock = null;
+    private SudokuClock playerClock = null;
+
+    private PlayerManager playerManager;
+    private int gameMode;
 
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
 
+    private TextView tvPlayerClock, tvPlayer;
+
+
     public GameBoard(Context context, int level, TextView tvClock) {
         super(context);
+        this.gameMode = 1;
         this.context = context;
         this.level = level;
         this.clock = new SudokuClock(tvClock);
@@ -38,6 +45,22 @@ public class GameBoard extends View {
         initializeGame(level);
         resolveGame(board.toPrimitiveBoard());
         clock.startClock();
+    }
+
+    public GameBoard(Context context, int level, TextView tvClock, TextView tvPlayerClock, TextView tvPlayer) {
+        super(context);
+        this.gameMode= 2;
+        this.tvPlayerClock = tvPlayerClock;
+        this.tvPlayer = tvPlayer;
+        this.context = context;
+        this.level = level;
+        this.clock = new SudokuClock(tvClock);
+        playerManager = new PlayerManager(new Player("A", true), new Player("B"), tvPlayer, tvPlayerClock);
+        createPaints();
+        initializeGame(level);
+        resolveGame(board.toPrimitiveBoard());
+        clock.startClock();
+        playerManager.triggerPlayerClock();
     }
 
     public void createPaints() {
@@ -152,15 +175,26 @@ public class GameBoard extends View {
             int cellY = px / cellW;
             int cellX = py / cellH;
 
-            if (!isNotesMode) {
-                if (!board.setValue(cellX, cellY, selectedNumber))
-                    Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
-                else
-                    updateNotes(cellX,cellY);
-            } else {
-                board.addNote(cellX, cellY, selectedNumber);
+            if (gameMode==1) {
+                if (!isNotesMode) {
+                    if (!board.setValue(cellX, cellY, selectedNumber))
+                        Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
+                    else
+                        updateNotes(cellX, cellY);
+                } else {
+                    board.addNote(cellX, cellY, selectedNumber);
+                }
+            } else if (gameMode==2) {
+                if (!isNotesMode) {
+                    if (!board.setValue(cellX, cellY, selectedNumber, playerManager))
+                        Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
+                    else
+                        updateNotes(cellX, cellY);
+                } else {
+                    board.addNote(cellX, cellY, selectedNumber);
+                }
+                Toast.makeText(context, playerManager.getActualPlayer().getRightGuesses()+"", Toast.LENGTH_SHORT).show();
             }
-
             invalidate();
         }
         return super.onTouchEvent(event);
