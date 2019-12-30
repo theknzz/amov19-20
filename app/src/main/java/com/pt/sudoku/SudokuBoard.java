@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SudokuBoard {
     private final int BOARD_SIZE = 9;
@@ -155,5 +156,27 @@ public class SudokuBoard {
                 list.add(i);
         }
         return list;
+    }
+
+    public List<SudokuCell> getBoard() {
+        return board;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        List<SudokuCell> list = ((SudokuBoard)o).getBoard();
+        for (int i =0; i < board.size(); i++)
+            if (board.get(i).getValue()!=list.get(i).getValue())
+                return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board);
+    }
+
+    public void setBoard(List<SudokuCell> board) {
+        this.board = board;
     }
 }

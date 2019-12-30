@@ -64,4 +64,8 @@ public class Gameplay extends AppCompatActivity {
     public void onChangeMode(View view) {
         board.switchGameMode();
     }
+
+    public void onCheat(View view) {
+        board.cheat();
+    }
 }

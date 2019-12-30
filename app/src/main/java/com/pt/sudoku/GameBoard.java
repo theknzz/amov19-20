@@ -134,6 +134,19 @@ public class GameBoard extends View {
                 }
             }
         }
+        if (isGameFinished()) {
+            if (gameMode==2) {
+                Player p = playerManager.getWinner();
+                Toast.makeText(context, "Player " + p.getName() + " won the game.", Toast.LENGTH_SHORT).show();
+            }
+            else if (gameMode==1) {
+                Toast.makeText(context, "Game is over!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean isGameFinished() {
+        return board.equals(gameSolution);
     }
 
     private void updateNotes(int r, int c) {
@@ -318,5 +331,10 @@ public class GameBoard extends View {
     public void switchGameMode() {
         gameMode=1;
         playerManager.lockPlayer(tvClock);
+    }
+
+    public void cheat() {
+        board.setBoard(gameSolution.getBoard());
+        invalidate();
     }
 }

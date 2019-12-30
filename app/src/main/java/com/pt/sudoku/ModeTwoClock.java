@@ -21,7 +21,13 @@ public class ModeTwoClock implements Runnable {
 
     @Override
     public void run() {
-        if (manager.isPlayerLocked()) timerHandler.removeCallbacksAndMessages(this);
+        if (manager.isPlayerGotRightGuess()) {
+            Log.i("CLOCK", "deu porra");
+            timerHandler.removeCallbacksAndMessages(this);
+            manager.switchPlayerGotRightGuess();
+            return;
+        }
+        else if (manager.isPlayerLocked()) timerHandler.removeCallbacksAndMessages(this);
         else {
             seconds++;
             seconds = seconds % 60;

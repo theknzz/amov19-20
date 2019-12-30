@@ -1,6 +1,7 @@
 package com.pt.sudoku;
 
 import android.os.Handler;
+import android.os.Message;
 import android.widget.TextView;
 
 public class SudokuClock {
@@ -30,6 +31,10 @@ public class SudokuClock {
     }
 
     public void stopClock() {
+//        if (winReset) {
+//            Message msg = Message.obtain(timeHandler, 420);
+//            msg.sendToTarget();
+//        }
         timeHandler.removeCallbacksAndMessages(timeHandler);
     }
 }

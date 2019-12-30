@@ -1,6 +1,5 @@
 package com.pt.sudoku;
 
-import android.util.Log;
 import android.widget.TextView;
 
 public class PlayerManager {
@@ -9,6 +8,7 @@ public class PlayerManager {
     private TextView tvPlayer, tvPlayerClock;
     private SudokuClock playerClock;
     private boolean isPlayerLocked;
+    private boolean playerGotRightGuess;
 
     public PlayerManager(Player playerA, Player playerB, TextView tvPlayer, TextView tvPlayerClock) {
         this.playerA = playerA;
@@ -42,13 +42,22 @@ public class PlayerManager {
         return playerA.isPlaying()? playerA:playerB;
     }
 
+    public boolean isPlayerGotRightGuess() {
+        return playerGotRightGuess;
+    }
+
+    public void switchPlayerGotRightGuess() {
+        playerGotRightGuess = false;
+        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.EXTRA_TIME_FOR_RIGHT_GUESS);
+    }
+
     public void addWrongGuessToActualPlayer() {
         getActualPlayer().addWrongGuess();
     }
 
     public void addRightGuessToActualPlayer() {
         getActualPlayer().addRightGuess();
-        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.EXTRA_TIME_FOR_RIGHT_GUESS);
+        playerGotRightGuess = true;
     }
 
     public void triggerPlayerClock() {
@@ -59,5 +68,9 @@ public class PlayerManager {
         isPlayerLocked = true;
         tvPlayerClock.setText("");
         playerClock.stopClock();
+    }
+
+    public Player getWinner() {
+        return playerA.getRightGuesses()>playerB.getRightGuesses()?playerA:playerB;
     }
 }
