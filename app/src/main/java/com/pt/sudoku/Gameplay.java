@@ -59,4 +59,9 @@ public class Gameplay extends AppCompatActivity {
     public void onNotes(View view) {
         board.switchNotesMode();
     }
+
+
+    public void onChangeMode(View view) {
+        board.switchGameMode();
+    }
 }

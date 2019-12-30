@@ -1,6 +1,7 @@
 package com.pt.sudoku;
 
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 public class ModeTwoClock implements Runnable {
@@ -20,15 +21,22 @@ public class ModeTwoClock implements Runnable {
 
     @Override
     public void run() {
-        seconds++;
-        seconds = seconds % 60;
+        if (manager.isPlayerLocked()) timerHandler.removeCallbacksAndMessages(this);
+        else {
+            seconds++;
+            seconds = seconds % 60;
+            Log.i("CLOCK", manager.getActualPlayer().getName() + " - time: " + seconds + " of " + limSeconds);
 
-        if (seconds>=limSeconds) {
-            manager.switchPlayerTurn();
-            seconds = 0;
-            timerHandler.removeCallbacks(this);
+            if (seconds >= limSeconds) {
+                Log.i("CLOCK", manager.getActualPlayer().getName() + " time limit reached");
+                manager.switchPlayerTurn();
+                seconds = 0;
+                timerHandler.removeCallbacksAndMessages(this);
+                return;
+            } else {
+                tvPlayerClock.setText(String.format("PlayerTimer: %02d", seconds));
+            }
+            timerHandler.postDelayed(this, 1000);
         }
-        tvPlayerClock.setText(String.format("PlayerTimer: %02d", seconds));
-        timerHandler.postDelayed(this, 1000);
     }
 }

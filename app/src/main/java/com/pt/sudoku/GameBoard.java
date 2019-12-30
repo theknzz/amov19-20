@@ -32,7 +32,7 @@ public class GameBoard extends View {
 
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
 
-    private TextView tvPlayerClock, tvPlayer;
+    private TextView tvPlayerClock, tvPlayer, tvClock;
 
 
     public GameBoard(Context context, int level, TextView tvClock) {
@@ -313,5 +313,10 @@ public class GameBoard extends View {
             isNotesMode = false;
         else
             isNotesMode = true;
+    }
+
+    public void switchGameMode() {
+        gameMode=1;
+        playerManager.lockPlayer(tvClock);
     }
 }

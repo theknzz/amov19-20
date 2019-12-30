@@ -12,11 +12,11 @@ public class SudokuClock {
     }
 
     public SudokuClock(SudokuCell cell, GameBoard game) {
-        this.timerRunnable = new WrongCellTimeThread(timeHandler, cell, 3, game);
+        this.timerRunnable = new WrongCellTimeThread(timeHandler, cell, GameRules.TIME_WRONG_CELL_IS_ACTIVE, game);
     }
 
     public SudokuClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager) {
-        this.timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, 5);
+        this.timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, GameRules.ROUND_TIME);
     }
 
     public void startClock() {
@@ -24,9 +24,12 @@ public class SudokuClock {
     }
 
     public void resetPlayerClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds) {
-        timeHandler.removeCallbacks(timerRunnable);
+        timeHandler.removeCallbacksAndMessages(timerRunnable);
         timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, seconds);
         timeHandler.postDelayed(timerRunnable, 0);
     }
 
+    public void stopClock() {
+        timeHandler.removeCallbacksAndMessages(timeHandler);
+    }
 }

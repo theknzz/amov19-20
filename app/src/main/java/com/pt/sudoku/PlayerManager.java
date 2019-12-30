@@ -8,6 +8,7 @@ public class PlayerManager {
     private Player playerB;
     private TextView tvPlayer, tvPlayerClock;
     private SudokuClock playerClock;
+    private boolean isPlayerLocked;
 
     public PlayerManager(Player playerA, Player playerB, TextView tvPlayer, TextView tvPlayerClock) {
         this.playerA = playerA;
@@ -17,7 +18,12 @@ public class PlayerManager {
         playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this);
     }
 
+    public boolean isPlayerLocked() {
+        return isPlayerLocked;
+    }
+
     public void switchPlayerTurn() {
+        if (isPlayerLocked) return;
         if (playerA.isPlaying())
         {
             playerA.setPlaying(false);
@@ -29,7 +35,7 @@ public class PlayerManager {
             playerB.setPlaying(false);
         }
         tvPlayer.setText("Player: " + getActualPlayer().getName());
-        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, 5);
+        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.ROUND_TIME);
     }
 
     public Player getActualPlayer() {
@@ -42,10 +48,16 @@ public class PlayerManager {
 
     public void addRightGuessToActualPlayer() {
         getActualPlayer().addRightGuess();
-        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, 20);
+        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.EXTRA_TIME_FOR_RIGHT_GUESS);
     }
 
     public void triggerPlayerClock() {
         playerClock.startClock();
+    }
+
+    public void lockPlayer(TextView tvClock) {
+        isPlayerLocked = true;
+        tvPlayerClock.setText("");
+        playerClock.stopClock();
     }
 }
