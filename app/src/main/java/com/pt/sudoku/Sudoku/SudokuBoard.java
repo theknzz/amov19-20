@@ -1,10 +1,10 @@
-package com.pt.sudoku;
+package com.pt.sudoku.Sudoku;
 
-import java.lang.reflect.Array;
+import com.pt.sudoku.PlayerContents.PlayerManager;
+
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 public class SudokuBoard {
     private final int BOARD_SIZE = 9;
@@ -53,6 +53,20 @@ public class SudokuBoard {
     public boolean setValue(int row, int col, int value) {
         if (!isValidInsert(row, col, value)) return false;
         return get(row,col).setValue(value);
+    }
+
+    public boolean setValue(int row, int col, int value, PlayerManager manager) {
+        if (!isValidInsert(row, col, value)) return false;
+        if (isAgainstRules(row,col,value)){
+            manager.addWrongGuessToActualPlayer();
+            return get(row,col).setValue(value);
+        }
+        manager.addRightGuessToActualPlayer();
+        return get(row,col).setValue(value);
+    }
+
+    private boolean isAgainstRules(int row, int col, int value) {
+        return hasDoubledInSameBlock(row, col, value) || hasDoubledInSameColumn(row, col, value) || hasDoubledInSameRow(row, col, value);
     }
 
     public boolean hasDoubledInSameRow(int row, int column, int number) {
@@ -143,5 +157,27 @@ public class SudokuBoard {
                 list.add(i);
         }
         return list;
+    }
+
+    public List<SudokuCell> getBoard() {
+        return board;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        List<SudokuCell> list = ((SudokuBoard)o).getBoard();
+        for (int i =0; i < board.size(); i++)
+            if (board.get(i).getValue()!=list.get(i).getValue())
+                return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board);
+    }
+
+    public void setBoard(List<SudokuCell> board) {
+        this.board = board;
     }
 }

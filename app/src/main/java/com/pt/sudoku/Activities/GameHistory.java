@@ -1,8 +1,10 @@
-package com.pt.sudoku;
+package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.pt.sudoku.R;
 
 public class GameHistory extends AppCompatActivity {
 

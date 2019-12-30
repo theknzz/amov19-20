@@ -1,4 +1,4 @@
-package com.pt.sudoku;
+package com.pt.sudoku.PlayerContents;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import com.pt.sudoku.Activities.Gameplay;
+import com.pt.sudoku.R;
 
 public class PlayMenu extends AppCompatActivity {
 
@@ -46,17 +48,14 @@ public class PlayMenu extends AppCompatActivity {
         switch (b.getId()) {
             //button easy
             case R.id.btnEasy:
-                Toast.makeText(this,"Starting an easy game",Toast.LENGTH_LONG).show();
                 intent.putExtra("level", 6);
                 break;
             //button medium
             case R.id.btnMedium:
-                Toast.makeText(this,"Starting a medium game",Toast.LENGTH_LONG).show();
                 intent.putExtra("level", 8);
                 break;
             //button hard
             case R.id.btnHard:
-                Toast.makeText(this,"Starting hard game",Toast.LENGTH_LONG).show();
                 //TODO devia ser 12 mas o código do stor fica muito lento por isso ficou 10
                 intent.putExtra("level", 10);
                 break;
