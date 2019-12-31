@@ -2,11 +2,12 @@ package com.pt.sudoku.Sudoku;
 
 import com.pt.sudoku.PlayerContents.PlayerManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SudokuBoard {
+public class SudokuBoard implements Serializable {
     private final int BOARD_SIZE = 9;
     private List<SudokuCell> board = new ArrayList<>();
 

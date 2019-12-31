@@ -1,7 +1,6 @@
 package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,31 +10,33 @@ import android.widget.TextView;
 import com.pt.sudoku.Models.GameplayModel;
 import com.pt.sudoku.Sudoku.BoardView;
 import com.pt.sudoku.R;
+import com.pt.sudoku.Sudoku.GameLogic;
 
 public class GameplayActivity extends AppCompatActivity {
 
     private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock;
-    private BoardView board;
+    private GameLogic logic;
     private int level, mode;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("model",saveGameSate(board, level, mode));
+        outState.putSerializable("model",saveGameSate(logic, level, mode));
     }
 
-    private GameplayModel saveGameSate(BoardView board, int level, int mode) {
-        return new GameplayModel(board, level, mode);
+    private GameplayModel saveGameSate(GameLogic logic, int level, int mode) {
+        return new GameplayModel(logic, level, mode);
     }
 
     private void loadGameState(Bundle bundle) {
         GameplayModel model = (GameplayModel) bundle.getSerializable("model");
         this.level = model.getLevel();
         this.mode = model.getMode();
-        if (mode==1)
-            this.board = new BoardView(model.getBoard(), this, tvClock);
+        if (mode==1) {
+            this.logic = new GameLogic(model.getLogic(), model.getView(), tvClock);
+        }
         else if (mode == 2)
-            this.board = new BoardView(model.getBoard(), this, tvClock, tvPlayerClock, tvPlayer);
+            this.logic = new GameLogic(model.getLogic(), model.getView(), tvClock, tvPlayerClock, tvPlayer);
     }
 
     @Override
@@ -54,12 +55,12 @@ public class GameplayActivity extends AppCompatActivity {
         if (savedInstanceState!=null) {
             loadGameState(savedInstanceState);
             updateInitialTextViews();
-            flSudokuTable.addView(board);
+            flSudokuTable.addView(logic.getView());
         }
         else {
             updateInitialTextViews();
             initializeGameMode();
-            flSudokuTable.addView(board);
+            flSudokuTable.addView(logic.getView());
         }
     }
 
@@ -76,27 +77,27 @@ public class GameplayActivity extends AppCompatActivity {
 
     private void initializeGameMode() {
         if (mode==1)
-            board = new BoardView(this, level, tvClock);
+            logic = new GameLogic(this, level, tvClock);
         else if (mode==2)
-            board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer);
+            logic = new GameLogic(this, level, tvClock, tvPlayerClock, tvPlayer);
     }
 
     public void onNumberPicker(View view) {
         String btnText = ((Button) view).getText().toString();
-        board.setSelectedNumber(Integer.parseInt(btnText));
+        logic.setSelectedNumber(Integer.parseInt(btnText));
     }
 
     public void onNotes(View view) {
-        board.switchNotesMode();
+        logic.switchNotesMode();
     }
 
 
     public void onChangeMode(View view) {
-        board.switchGameMode();
+        logic.switchGameMode();
     }
 
     public void onCheat(View view) {
-        board.cheat();
+        logic.cheat();
     }
 
     public void gameFinished() {

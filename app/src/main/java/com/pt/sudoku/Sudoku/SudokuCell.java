@@ -1,9 +1,10 @@
 package com.pt.sudoku.Sudoku;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SudokuCell {
+public class SudokuCell implements Serializable {
     private int value;
     private boolean isModifiable;
     private List<Integer> notes = new ArrayList<>();

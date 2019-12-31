@@ -1,22 +1,27 @@
 package com.pt.sudoku.Models;
 
 import com.pt.sudoku.Sudoku.BoardView;
+import com.pt.sudoku.Sudoku.GameLogic;
 
 import java.io.Serializable;
 
 public class GameplayModel implements Serializable {
-    private BoardView board;
+    private GameLogic logic;
     private int level;
     private int mode;
 
-    public GameplayModel(BoardView board, int level, int mode) {
-        this.board = board;
+    public GameplayModel(GameLogic logic, int level, int mode) {
+        this.logic = logic;
         this.level = level;
         this.mode = mode;
     }
 
-    public BoardView getBoard() {
-        return board;
+    public GameLogic getLogic() {
+        return logic;
+    }
+
+    public BoardView getView() {
+        return logic.getView();
     }
 
     public int getLevel() {

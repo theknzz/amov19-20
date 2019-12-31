@@ -6,14 +6,17 @@ import android.widget.TextView;
 import com.pt.sudoku.Sudoku.BoardView;
 import com.pt.sudoku.GameRules;
 import com.pt.sudoku.PlayerContents.PlayerManager;
+import com.pt.sudoku.Sudoku.GameLogic;
 import com.pt.sudoku.Sudoku.SudokuCell;
 
-public class SudokuClock {
+import java.io.Serializable;
+
+public class SudokuClock implements Serializable {
     private Handler timeHandler = new Handler();
     private Runnable timerRunnable = null;
 
-    public SudokuClock(TextView tvClock, Clock clock) {
-        this.timerRunnable = new ModeOneClock(tvClock, timeHandler, clock);
+    public SudokuClock(TextView tvClock, Clock clock, GameLogic logic) {
+        this.timerRunnable = new ModeOneClock(tvClock, timeHandler, clock, logic);
     }
 
     public SudokuClock(SudokuCell cell, BoardView game, Clock clock) {
