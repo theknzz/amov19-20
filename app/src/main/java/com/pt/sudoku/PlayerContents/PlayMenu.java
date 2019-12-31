@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.pt.sudoku.Activities.GameQueue;
 import com.pt.sudoku.Activities.Gameplay;
 import com.pt.sudoku.R;
 
 public class PlayMenu extends AppCompatActivity {
 
     private Dialog difficultDialog;
+    private Dialog serverClient;
     private int mode;
 
     @Override
@@ -23,7 +25,7 @@ public class PlayMenu extends AppCompatActivity {
     }
 
     public void onMode(View view) {
-        switch (((Button)view).getText().toString()) {
+        switch (((Button) view).getText().toString()) {
             case "Mode 1":
                 mode = 1;
                 break;
@@ -34,9 +36,34 @@ public class PlayMenu extends AppCompatActivity {
                 mode = 3;
                 break;
         }
-        difficultDialog = new Dialog(this);
-        difficultDialog.setContentView(R.layout.pop_up_start);
-        difficultDialog.show();
+        if (mode != 3) {
+            difficultDialog = new Dialog(this);
+            difficultDialog.setContentView(R.layout.pop_up_start);
+            difficultDialog.show();
+        } else {
+
+            serverClient = new Dialog(this);
+            serverClient.setContentView(R.layout.pop_up_servers);
+            serverClient.show();
+        }
+    }
+
+    public void onChooseType(View view) {
+        Intent intent = new Intent(this, GameQueue.class);
+        String mode = "";
+
+        switch (((Button) view).getText().toString()) {
+            case "server": {
+                mode = "server";
+                break;
+            }
+            case "client": {
+                mode = "client";
+                break;
+            }
+        }
+        intent.putExtra("mode", mode);
+        startActivity(intent);
     }
 
     public void onLevelPick(View view) {

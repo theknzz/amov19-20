@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.Gameplay"></activity>
+        <activity android:name=".Activities.GameQueue"></activity>
+        <activity android:name=".Activities.Gameplay" />
         <activity android:name=".Activities.Settings" />
         <activity android:name=".Activities.GameHistory" />
         <activity android:name=".PlayerContents.PlayMenu" />
@@ -20,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".ComunicationBackgroundService" />
+        <service android:name=".ServerBackgroundService" />
+
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>
