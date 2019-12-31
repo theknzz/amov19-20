@@ -76,7 +76,7 @@ public class GameLogic implements Serializable {
         this.wrongClock = new Clock();
         this.context = (GameplayActivity) context;
         this.clock = new SudokuClock(tvClock, globalClock, this);
-        this.playerManager = new PlayerManager(new Player("A", true), new Player("B"),tvPlayer, tvPlayerClock, personalClock);
+        this.playerManager = new PlayerManager(new Player("A", true), new Player("B"),tvPlayer, tvPlayerClock, personalClock, this);
         initializeGame(level);
         resolveGame(board.toPrimitiveBoard());
         this.view = new BoardView(context, clock, playerManager, this);
@@ -235,7 +235,7 @@ public class GameLogic implements Serializable {
 
     public void invokeWrongClock(int r, int c) {
         wrongClock = new Clock();
-        SudokuClock wrongCellClock = new SudokuClock(board.get(r, c), view, wrongClock);
+        SudokuClock wrongCellClock = new SudokuClock(board.get(r, c), view, wrongClock, this);
         wrongCellClock.startClock();
     }
 
@@ -274,4 +274,5 @@ public class GameLogic implements Serializable {
     public void launchWonActivity() {
         context.gameFinished();
     }
+
 }

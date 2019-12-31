@@ -24,6 +24,8 @@ public class ModeOneClock implements Runnable {
     public void run() {
         if (logic.isFinished()) {
             logic.launchWonActivity();
+            timerHandler.removeCallbacksAndMessages(this);
+            return;
         }
         clock.incSeconds();
         clock.setMinutes(clock.getSeconds() / 60);

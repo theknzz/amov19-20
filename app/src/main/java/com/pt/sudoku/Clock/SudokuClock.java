@@ -2,13 +2,11 @@ package com.pt.sudoku.Clock;
 
 import android.os.Handler;
 import android.widget.TextView;
-
 import com.pt.sudoku.Sudoku.BoardView;
 import com.pt.sudoku.GameRules;
 import com.pt.sudoku.PlayerContents.PlayerManager;
 import com.pt.sudoku.Sudoku.GameLogic;
 import com.pt.sudoku.Sudoku.SudokuCell;
-
 import java.io.Serializable;
 
 public class SudokuClock implements Serializable {
@@ -19,21 +17,21 @@ public class SudokuClock implements Serializable {
         this.timerRunnable = new ModeOneClock(tvClock, timeHandler, clock, logic);
     }
 
-    public SudokuClock(SudokuCell cell, BoardView game, Clock clock) {
-        this.timerRunnable = new WrongCellTimeThread(timeHandler, cell, GameRules.TIME_WRONG_CELL_IS_ACTIVE, game, clock);
+    public SudokuClock(SudokuCell cell, BoardView game, Clock clock, GameLogic logic) {
+        this.timerRunnable = new WrongCellTimeThread(timeHandler, cell, GameRules.TIME_WRONG_CELL_IS_ACTIVE, game, clock, logic);
     }
 
-    public SudokuClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, Clock clock) {
-        this.timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, GameRules.ROUND_TIME, clock);
+    public SudokuClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, Clock clock, GameLogic logic) {
+        this.timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, GameRules.ROUND_TIME, clock, logic);
     }
 
     public void startClock() {
         timeHandler.postDelayed(timerRunnable, 0);
     }
 
-    public void resetPlayerClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds, Clock clock) {
+    public void resetPlayerClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds, Clock clock, GameLogic logic) {
         timeHandler.removeCallbacksAndMessages(timerRunnable);
-        timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, seconds, clock);
+        timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, seconds, clock, logic);
         timeHandler.postDelayed(timerRunnable, 0);
     }
 

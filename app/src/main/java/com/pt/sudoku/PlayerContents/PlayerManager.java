@@ -5,6 +5,7 @@ import android.widget.TextView;
 import com.pt.sudoku.Clock.Clock;
 import com.pt.sudoku.Clock.SudokuClock;
 import com.pt.sudoku.GameRules;
+import com.pt.sudoku.Sudoku.GameLogic;
 
 public class PlayerManager {
     private Player playerA;
@@ -13,13 +14,14 @@ public class PlayerManager {
     private SudokuClock playerClock;
     private boolean isPlayerLocked;
     private boolean playerGotRightGuess;
+    private GameLogic logic;
 
-    public PlayerManager(Player playerA, Player playerB, TextView tvPlayer, TextView tvPlayerClock, Clock clock) {
+    public PlayerManager(Player playerA, Player playerB, TextView tvPlayer, TextView tvPlayerClock, Clock clock, GameLogic logic) {
         this.playerA = playerA;
         this.playerB = playerB;
         this.tvPlayer = tvPlayer;
         this.tvPlayerClock = tvPlayerClock;
-        playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this, clock);
+        playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this, clock, logic);
     }
 
     public PlayerManager(PlayerManager manager, TextView tvPlayer, TextView tvPlayerClock, Clock clock) {
@@ -27,7 +29,7 @@ public class PlayerManager {
         this.playerB = manager.getPlayerB();
         this.tvPlayer = tvPlayer;
         this.tvPlayerClock = tvPlayerClock;
-        this.playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this, clock);
+        this.playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this, clock, logic);
         this.isPlayerLocked = manager.isPlayerLocked();
         this.playerGotRightGuess = manager.isPlayerGotRightGuess();
     }
@@ -59,7 +61,7 @@ public class PlayerManager {
             playerB.setPlaying(false);
         }
         tvPlayer.setText("Player: " + getActualPlayer().getName());
-        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.ROUND_TIME, new Clock());
+        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.ROUND_TIME, new Clock(), logic);
     }
 
     public Player getActualPlayer() {
@@ -72,7 +74,7 @@ public class PlayerManager {
 
     public void switchPlayerGotRightGuess() {
         playerGotRightGuess = false;
-        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.EXTRA_TIME_FOR_RIGHT_GUESS, new Clock());
+        playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.EXTRA_TIME_FOR_RIGHT_GUESS, new Clock(), logic);
     }
 
     public void addWrongGuessToActualPlayer() {

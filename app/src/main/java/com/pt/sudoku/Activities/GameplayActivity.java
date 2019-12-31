@@ -12,6 +12,8 @@ import com.pt.sudoku.Sudoku.BoardView;
 import com.pt.sudoku.R;
 import com.pt.sudoku.Sudoku.GameLogic;
 
+import java.io.Serializable;
+
 public class GameplayActivity extends AppCompatActivity {
 
     private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock;
@@ -101,6 +103,7 @@ public class GameplayActivity extends AppCompatActivity {
     }
 
     public void gameFinished() {
+        logic = null;
         Intent intent = new Intent(this, GameWonActivity.class);
         startActivity(intent);
     }
