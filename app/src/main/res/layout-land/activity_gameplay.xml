@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Gameplay">
+    tools:context=".Activities.GameplayActivity">
 
     <FrameLayout
         android:id="@+id/flSudokuTable"
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Mode: "
+                    android:text="@string/mode"
                     android:textAlignment="center"
                     android:textSize="15sp" />
 
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Level: "
+                    android:text="@string/level"
                     android:textAlignment="center"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Player: "
+                    android:text="@string/player"
                     android:textAlignment="center"
                     android:textSize="15sp" />
 
@@ -204,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onCheat"
-                android:text="Cheat"
+                android:text="@string/cheat"
                 android:textSize="12sp" />
 
             <Button
@@ -213,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onNotes"
-                android:text="Notes"
+                android:text="@string/notes"
                 android:textSize="12sp" />
 
             <Button
@@ -222,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onChangeMode"
-                android:text="Mode"
+                android:text="@string/change_mode"
                 android:textSize="12sp" />
         </LinearLayout>
 

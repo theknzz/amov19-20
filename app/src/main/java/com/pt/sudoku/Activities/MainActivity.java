@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onHistory(View view) {
-        Intent intent = new Intent(this, GameHistory.class);
+        Intent intent = new Intent(this, GameHistoryActivity.class);
         startActivity(intent);
     }
 
     public void onSettings(View view) {
-        Intent intent = new Intent(this, Settings.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 }

@@ -24,7 +24,7 @@
             android:id="@+id/tvPopUpStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose game difficulty:"
+            android:text="@string/choose_game_difficulty"
             android:textAlignment="center"
             android:textSize="24sp" />
 
@@ -33,20 +33,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onLevelPick"
-            android:text="Easy" />
+            android:text="@string/easy" />
 
         <Button
             android:id="@+id/btnMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onLevelPick"
-            android:text="Medium" />
+            android:text="@string/medium" />
 
         <Button
             android:id="@+id/btnHard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onLevelPick"
-            android:text="Hard" />
+            android:text="@string/hard" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

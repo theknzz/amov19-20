@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.pt.sudoku.R;
 
-public class Settings extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

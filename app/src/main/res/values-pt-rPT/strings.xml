@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sudoku</string>
+    <string name="mode">Modo:</string>
+    <string name="level">Nível:</string>
+    <string name="player">Jogador:</string>
+    <string name="notes">Notas</string>
+    <string name="change_mode">Mudar Modo</string>
+    <string name="cheat">Trapaça</string>
+    <string name="play">Jogar</string>
+    <string name="history">Histórico</string>
+    <string name="settings">Definições</string>
+    <string name="play_menu">Menu de Jogo</string>
+    <string name="mode_1">Modo 1</string>
+    <string name="mode_2">Modo 2</string>
+    <string name="mode_3">Modo 3</string>
+    <string name="choose_game_difficulty">Escolher dificuldade do jogo:</string>
+    <string name="easy">Fácil</string>
+    <string name="medium">Médio</string>
+    <string name="hard">Difícil</string>
+</resources>

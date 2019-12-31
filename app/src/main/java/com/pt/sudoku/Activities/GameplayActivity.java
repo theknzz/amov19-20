@@ -1,6 +1,8 @@
 package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +12,9 @@ import com.pt.sudoku.Models.GameplayModel;
 import com.pt.sudoku.Sudoku.BoardView;
 import com.pt.sudoku.R;
 
-public class Gameplay extends AppCompatActivity {
+public class GameplayActivity extends AppCompatActivity {
 
-    private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock, tvWinOutput;
+    private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock;
     private BoardView board;
     private int level, mode;
 
@@ -31,22 +33,20 @@ public class Gameplay extends AppCompatActivity {
         this.level = model.getLevel();
         this.mode = model.getMode();
         if (mode==1)
-            this.board = new BoardView(model.getBoard(), this, tvClock, tvWinOutput);
+            this.board = new BoardView(model.getBoard(), this, tvClock);
         else if (mode == 2)
-            this.board = new BoardView(model.getBoard(), this, tvClock, tvPlayerClock, tvPlayer, tvWinOutput);
+            this.board = new BoardView(model.getBoard(), this, tvClock, tvPlayerClock, tvPlayer);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
-
         tvClock = findViewById(R.id.tvClock);
         tvPlayer = findViewById(R.id.tvPlayer);
         tvMode = findViewById(R.id.tvMode);
         tvLevel = findViewById(R.id.tvLevel);
         tvPlayerClock = findViewById(R.id.tvPlayerTimer);
-        tvWinOutput = findViewById(R.id.tvWinOutput);
         FrameLayout flSudokuTable = findViewById(R.id.flSudokuTable);
         level = getIntent().getIntExtra("level", 0);
         mode = getIntent().getIntExtra("mode", 0);
@@ -64,21 +64,21 @@ public class Gameplay extends AppCompatActivity {
     }
 
     private void updateInitialTextViews() {
-        tvMode.setText("Mode: " + mode);
-        tvPlayer.setText("Player: A");
+        tvMode.setText(getString(R.string.mode)+ mode);
+        tvPlayer.setText(getString(R.string.player)+" A");
         if (level==6)
-            tvLevel.setText("Level: Easy");
+            tvLevel.setText(getString(R.string.level)+" "+getString(R.string.easy));
         else if (level==8)
-            tvLevel.setText("Level: Medium");
+            tvLevel.setText(getString(R.string.level)+" "+getString(R.string.medium));
         else if (level==10)
-            tvLevel.setText("Level: Hard");
+            tvLevel.setText(getString(R.string.level)+" "+getString(R.string.hard));
     }
 
     private void initializeGameMode() {
         if (mode==1)
-            board = new BoardView(this, level, tvClock, tvWinOutput);
+            board = new BoardView(this, level, tvClock);
         else if (mode==2)
-            board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer, tvWinOutput);
+            board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer);
     }
 
     public void onNumberPicker(View view) {
@@ -97,6 +97,11 @@ public class Gameplay extends AppCompatActivity {
 
     public void onCheat(View view) {
         board.cheat();
+    }
+
+    public void gameFinished() {
+        Intent intent = new Intent(this, GameWonActivity.class);
+        startActivity(intent);
     }
 
 }

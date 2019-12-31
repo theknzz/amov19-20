@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.pt.sudoku.Activities.Gameplay;
+import com.pt.sudoku.Activities.GameplayActivity;
 import com.pt.sudoku.R;
 
 public class PlayMenu extends AppCompatActivity {
@@ -23,17 +23,13 @@ public class PlayMenu extends AppCompatActivity {
     }
 
     public void onMode(View view) {
-        switch (((Button)view).getText().toString()) {
-            case "Mode 1":
-                mode = 1;
-                break;
-            case "Mode 2":
-                mode = 2;
-                break;
-            case "Mode 3":
-                mode = 3;
-                break;
-        }
+        String str = ((Button)view).getText().toString();
+        if (str.equals(getString(R.string.mode_1)))
+            mode = 1;
+        else if (str.equals(getString(R.string.mode_2)))
+            mode = 2;
+        else if (str.equals(getString(R.string.mode_3)))
+            mode = 3;
         difficultDialog = new Dialog(this);
         difficultDialog.setContentView(R.layout.pop_up_start);
         difficultDialog.show();
@@ -41,7 +37,7 @@ public class PlayMenu extends AppCompatActivity {
 
     public void onLevelPick(View view) {
 
-        Intent intent = new Intent(this, Gameplay.class);
+        Intent intent = new Intent(this, GameplayActivity.class);
         intent.putExtra("mode", mode);
 
         Button b = (Button) view;

@@ -24,7 +24,7 @@
         android:id="@+id/tvSubMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play Menu"
+        android:text="@string/play_menu"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onPlay"
-            android:text="Jogar"
+            android:text="@string/play"
             android:textSize="14sp" />
 
         <Button
@@ -60,7 +60,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onHistory"
-            android:text="Histórico"
+            android:text="@string/history"
             android:textSize="14sp" />
 
         <Button
@@ -69,7 +69,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onSettings"
-            android:text="Definições"
+            android:text="@string/settings"
             android:textSize="14sp" />
     </LinearLayout>
 

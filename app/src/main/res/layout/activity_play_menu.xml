@@ -37,7 +37,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onMode"
-            android:text="Mode 1" />
+            android:text="@string/mode_1" />
 
         <Button
             android:id="@+id/btnMode2"
@@ -45,7 +45,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onMode"
-            android:text="Mode 2" />
+            android:text="@string/mode_2" />
 
         <Button
             android:id="@+id/btnMode3"
@@ -53,7 +53,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="onMode"
-            android:text="Mode 3" />
+            android:text="@string/mode_3" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

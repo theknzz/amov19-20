@@ -25,7 +25,6 @@ public class ModeTwoClock implements Runnable {
     @Override
     public void run() {
         if (manager.isPlayerGotRightGuess()) {
-            Log.i("CLOCK", "deu porra");
             timerHandler.removeCallbacksAndMessages(this);
             manager.switchPlayerGotRightGuess();
             return;
@@ -34,7 +33,6 @@ public class ModeTwoClock implements Runnable {
         else {
             clock.incSeconds();
             Log.i("CLOCK", manager.getActualPlayer().getName() + " - time: " + clock.getSeconds() + " of " + limSeconds);
-
             if (clock.getSeconds() >= limSeconds) {
                 Log.i("CLOCK", manager.getActualPlayer().getName() + " time limit reached");
                 manager.switchPlayerTurn();

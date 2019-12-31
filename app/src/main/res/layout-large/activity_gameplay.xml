@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Gameplay">
+    tools:context=".Activities.GameplayActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Mode: "
+                android:text="@string/mode"
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Level: "
+                android:text="@string/level"
                 android:textAlignment="center"
                 android:textSize="24sp" />
         </LinearLayout>
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Player: "
+                android:text="@string/player"
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -210,7 +210,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:onClick="onNotes"
-        android:text="Notes"
+        android:text="@string/notes"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -221,7 +221,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onChangeMode"
-        android:text="Change Mode"
+        android:text="@string/change_mode"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -232,7 +232,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onCheat"
-        android:text="Cheat"
+        android:text="@string/cheat"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnNotes"
         app:layout_constraintEnd_toStartOf="@+id/btnNotes"
