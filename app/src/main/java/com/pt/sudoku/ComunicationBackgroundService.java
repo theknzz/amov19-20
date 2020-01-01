@@ -31,11 +31,12 @@ public class ComunicationBackgroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final String mode = intent.getStringExtra("mode");
+        final String clientIP = intent.getStringExtra("ip");
 
         final Semaphore semaphoreClients = new Semaphore(0);
         final Semaphore startLocalCliente = new Semaphore(0);
 
-        if (mode.equals("server")) {
+        if (mode != null && mode.equals("server")) {
             Thread server = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -44,7 +45,7 @@ public class ComunicationBackgroundService extends Service {
 
                         int numClients = 0;
 
-                        while (numClients < 1) {
+                        while (numClients < 2) {
 
                             startLocalCliente.release(1);
                             final Socket clientSocket = serverSocket.accept();
@@ -64,6 +65,7 @@ public class ComunicationBackgroundService extends Service {
                                             //ordena o inicio do jogo
 
                                             out.write("start\n");
+                                            out.flush();
 
                                             //espera inicio do jogo
                                             //String message = in.readLine();
@@ -90,18 +92,17 @@ public class ComunicationBackgroundService extends Service {
             @Override
             public void run() {
                 try {
-                    if(mode.equals("server")){
+                    if (mode.equals("server")) {
                         startLocalCliente.acquire();
-
                     }
 
-                    Socket socket = new Socket("127.0.0.1", 9080);
+                    Socket socket = new Socket(clientIP, 9080);
 
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                     String s = in.readLine();
-
+                    System.exit(1);
 
                 } catch (Exception e) {
                     e.printStackTrace();

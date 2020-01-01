@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Activities.GameQueue">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Waiting for clients to join"
-        tools:layout_editor_absoluteX="110dp"
-        tools:layout_editor_absoluteY="110dp" />
+    <LinearLayout
+        android:layout_width="256dp"
+        android:layout_height="359dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/waitingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for clients to join" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
