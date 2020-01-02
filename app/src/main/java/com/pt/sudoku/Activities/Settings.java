@@ -2,8 +2,11 @@ package com.pt.sudoku.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraDevice;
@@ -46,12 +49,19 @@ public class Settings extends AppCompatActivity {
         if(imageView == null){
             //return
         }
-        final File file = new File(Environment.getExternalStorageDirectory()+getString(R.string.photo_location));
-        if(file.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            imageView.setImageBitmap(myBitmap);
-        }else{
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 201);
             imageView.setImageResource(R.drawable.default_pic);
+        }else{
+            final File file = new File(Environment.getExternalStorageDirectory()+getString(R.string.photo_location));
+            if(file.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                imageView.setImageBitmap(myBitmap);
+            }else{
+                imageView.setImageResource(R.drawable.default_pic);
+            }
         }
+
+
     }
 }

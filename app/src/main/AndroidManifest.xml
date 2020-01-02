@@ -19,8 +19,8 @@
         <activity android:name=".Activities.Settings" />
         <activity android:name=".Activities.GameHistory" />
         <activity android:name=".PlayerContents.PlayMenu" />
+        <activity android:name=".Activities.ChangePhoto"/>
         <activity android:name=".Activities.MainActivity">
-        <activity android:name=".Activities.ChangePhoto">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
