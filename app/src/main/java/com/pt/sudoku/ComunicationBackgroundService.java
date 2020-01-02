@@ -45,8 +45,9 @@ public class ComunicationBackgroundService extends Service {
 
                         int numClients = 0;
 
-                        while (numClients < 2) {
+                        while (numClients < 3) {
 
+                            //deixa ele proprio ligar-se
                             startLocalCliente.release(1);
                             final Socket clientSocket = serverSocket.accept();
 
@@ -60,10 +61,16 @@ public class ComunicationBackgroundService extends Service {
                                         Gson gson = new Gson();
 
                                         while (true) {
+
+                                            //espera que tenha autorização oara começar
                                             semaphoreClients.acquire();
 
-                                            //ordena o inicio do jogo
+                                            //chega aqui qnd o servidor tiver 3 clientes
 
+
+                                            // aqui é feita a comunicação com o cliente
+
+                                            //ordena o inicio do jogo
                                             out.write("start\n");
                                             out.flush();
 
@@ -79,7 +86,7 @@ public class ComunicationBackgroundService extends Service {
                             threadClient.start();
                             numClients++;
                         }
-                        semaphoreClients.release(1);
+                        semaphoreClients.release(2);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -92,6 +99,7 @@ public class ComunicationBackgroundService extends Service {
             @Override
             public void run() {
                 try {
+                    //se for o mesmo dispositivo que está a ser de servidor, tem que esperar que o server ligue para se ligar
                     if (mode.equals("server")) {
                         startLocalCliente.acquire();
                     }
@@ -101,6 +109,8 @@ public class ComunicationBackgroundService extends Service {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
+
+                    //aqui é feita a comunicação com o servidor
                     String s = in.readLine();
                     System.exit(1);
 
