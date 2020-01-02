@@ -39,4 +39,10 @@ public class Clock {
     public void resetSeconds() {
         this.seconds = 0;
     }
+
+    public String getAsString(){
+        if(seconds<10)
+            return minutes + ":0" + seconds;
+        return minutes + ":" + seconds;
+    }
 }

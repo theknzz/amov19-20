@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pt.sudoku.Activities.Settings;
 import com.pt.sudoku.Clock.Clock;
 import com.pt.sudoku.Clock.SudokuClock;
+import com.pt.sudoku.History.HistoryModel;
 import com.pt.sudoku.PlayerContents.Player;
 import com.pt.sudoku.PlayerContents.PlayerManager;
 import com.pt.sudoku.R;
@@ -209,11 +211,15 @@ public class BoardView extends View {
                 tvWinOutput.setText("Player won the game (with " + p.getRightGuesses()+ ").");
                 Toast.makeText(context, "Player won the game (with " + p.getRightGuesses()+ ").", Toast.LENGTH_SHORT).show();
                 winDialog.show();
+                Player j = playerManager.getActualPlayer();
+                String result = "" + j.getRightGuesses();
+                HistoryModel.writeHistoryJSON(gameMode, level, result, p.getName());
             }
             else if (gameMode==1) {
                 Toast.makeText(context, "Game is over!", Toast.LENGTH_SHORT).show();
                 winDialog.setContentView(R.layout.pop_up_win);
                 winDialog.show();
+                HistoryModel.writeHistoryJSON(gameMode, level, getGlobalClock().getAsString(), "");
             }
         }
     }
