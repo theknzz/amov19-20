@@ -9,11 +9,17 @@ public class GameplayModel implements Serializable {
     private GameLogic logic;
     private int level;
     private int mode;
+    private String language;
 
-    public GameplayModel(GameLogic logic, int level, int mode) {
+    public GameplayModel(GameLogic logic, int level, int mode, String language) {
         this.logic = logic;
         this.level = level;
         this.mode = mode;
+        this.language = language;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public GameLogic getLogic() {

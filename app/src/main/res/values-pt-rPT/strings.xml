@@ -5,8 +5,8 @@
     <string name="level">Nível:</string>
     <string name="player">Jogador:</string>
     <string name="notes">Notas</string>
-    <string name="change_mode">Mudar Modo</string>
-    <string name="cheat">Trapaça</string>
+    <string name="change_mode">Singular</string>
+    <string name="cheat">Ajuda</string>
     <string name="play">Jogar</string>
     <string name="history">Histórico</string>
     <string name="settings">Definições</string>
@@ -18,4 +18,8 @@
     <string name="easy">Fácil</string>
     <string name="medium">Médio</string>
     <string name="hard">Difícil</string>
+    <string name="you_won">Parabéns, Ganhaste!</string>
+    <string name="play_again">Voltar a jogar</string>
+    <string name="change_to_portuguese">Mudar para Português</string>
+    <string name="change_to_english">Mudar para Inglês</string>
 </resources>

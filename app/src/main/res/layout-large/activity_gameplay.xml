@@ -204,39 +204,42 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnNotes"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:onClick="onNotes"
-        android:text="@string/notes"
-        android:textSize="24sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-    <Button
-        android:id="@+id/btnChangeMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onChangeMode"
-        android:text="@string/change_mode"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@id/linearLayout3">
 
-    <Button
-        android:id="@+id/btnCheat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onCheat"
-        android:text="@string/cheat"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnNotes"
-        app:layout_constraintEnd_toStartOf="@+id/btnNotes"
-        app:layout_constraintStart_toEndOf="@+id/btnChangeMode"
-        app:layout_constraintTop_toTopOf="@+id/btnChangeMode" />
+        <Button
+            android:id="@+id/btnCheat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onCheat"
+            android:text="@string/cheat"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/btnChangeMode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onChangeMode"
+            android:text="@string/change_mode"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/btnNotes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:onClick="onNotes"
+            android:text="@string/notes"
+            android:textSize="24sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

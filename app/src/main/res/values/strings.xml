@@ -4,8 +4,8 @@
     <string name="level">Level:</string>
     <string name="player">Player:</string>
     <string name="notes">Notes</string>
-    <string name="change_mode">Change Mode</string>
-    <string name="cheat">Cheat</string>
+    <string name="change_mode">Single Mode</string>
+    <string name="cheat">Hint</string>
     <string name="play">Play</string>
     <string name="history">History</string>
     <string name="settings">Settings</string>
@@ -19,4 +19,6 @@
     <string name="hard">Hard</string>
     <string name="you_won">You Won</string>
     <string name="play_again">Play Again</string>
+    <string name="change_to_portuguese">Change to Portuguese</string>
+    <string name="change_to_english">Change to English</string>
 </resources>

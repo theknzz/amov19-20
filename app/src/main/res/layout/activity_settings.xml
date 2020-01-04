@@ -6,4 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".Activities.SettingsActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnPtLng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onLanguageChange"
+            android:text="@string/change_to_portuguese" />
+
+        <Button
+            android:id="@+id/btnEngLng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onLanguageChange"
+            android:text="@string/change_to_english" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

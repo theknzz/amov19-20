@@ -2,7 +2,10 @@ package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -13,6 +16,7 @@ import com.pt.sudoku.R;
 import com.pt.sudoku.Sudoku.GameLogic;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 public class GameplayActivity extends AppCompatActivity {
 
@@ -27,13 +31,14 @@ public class GameplayActivity extends AppCompatActivity {
     }
 
     private GameplayModel saveGameSate(GameLogic logic, int level, int mode) {
-        return new GameplayModel(logic, level, mode);
+        return new GameplayModel(logic, level, mode, Locale.getDefault().toLanguageTag());
     }
 
     private void loadGameState(Bundle bundle) {
         GameplayModel model = (GameplayModel) bundle.getSerializable("model");
         this.level = model.getLevel();
         this.mode = model.getMode();
+//        changeDisplayLanguage(model.getLanguage());
         if (mode==1) {
             this.logic = new GameLogic(model.getLogic(), model.getView(), tvClock);
         }
@@ -93,7 +98,6 @@ public class GameplayActivity extends AppCompatActivity {
         logic.switchNotesMode();
     }
 
-
     public void onChangeMode(View view) {
         logic.switchGameMode();
     }
@@ -105,7 +109,20 @@ public class GameplayActivity extends AppCompatActivity {
     public void gameFinished() {
         logic = null;
         Intent intent = new Intent(this, GameWonActivity.class);
+        finish();
         startActivity(intent);
+    }
+
+    private void changeDisplayLanguage(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(refresh);
     }
 
 }
