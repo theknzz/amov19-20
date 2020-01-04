@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
+
 import pt.isec.ans.sudokulibrary.Sudoku;
 
 public class GameLogic implements Serializable {
@@ -100,7 +102,9 @@ public class GameLogic implements Serializable {
     }
 
     public void cheat() {
-        board.setBoard(gameSolution.getBoard());
+        int index = board.getRandomUnfilledCellIndex();
+        int value = gameSolution.get(index).getValue();
+        board.get(index).setValue(value);
         view.invalidate();
     }
 

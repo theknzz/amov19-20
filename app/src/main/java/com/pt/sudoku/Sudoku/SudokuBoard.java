@@ -181,4 +181,19 @@ public class SudokuBoard implements Serializable {
     public void setBoard(List<SudokuCell> board) {
         this.board = board;
     }
+
+    public int getRandomUnfilledCellIndex() {
+        int index = (int) (Math.random() * (BOARD_SIZE * BOARD_SIZE) ) ;
+        while (true) {
+            if (board.get(index).getValue() == 0) {
+                return index;
+            } else {
+                index = (int) (Math.random() * (BOARD_SIZE * BOARD_SIZE)) ;
+            }
+        }
+    }
+
+    public SudokuCell get(int index) {
+        return board.get(index);
+    }
 }
