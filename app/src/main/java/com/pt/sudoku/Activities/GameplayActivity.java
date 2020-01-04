@@ -31,14 +31,13 @@ public class GameplayActivity extends AppCompatActivity {
     }
 
     private GameplayModel saveGameSate(GameLogic logic, int level, int mode) {
-        return new GameplayModel(logic, level, mode, Locale.getDefault().toLanguageTag());
+        return new GameplayModel(logic, level, mode);
     }
 
     private void loadGameState(Bundle bundle) {
         GameplayModel model = (GameplayModel) bundle.getSerializable("model");
         this.level = model.getLevel();
         this.mode = model.getMode();
-//        changeDisplayLanguage(model.getLanguage());
         if (mode==1) {
             this.logic = new GameLogic(model.getLogic(), model.getView(), tvClock);
         }
@@ -112,17 +111,5 @@ public class GameplayActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
-
-    private void changeDisplayLanguage(String lang) {
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
-        finish();
-        startActivity(refresh);
-    }
-
+    
 }

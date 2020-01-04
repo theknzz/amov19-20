@@ -20,23 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState!=null)
-        {
-            changeDisplayLanguage(SettingsActivity.lang);
-        }
         setContentView(R.layout.activity_main);
-    }
-
-    private void changeDisplayLanguage(String lang) {
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
-        finish();
-        startActivity(refresh);
     }
 
     public void onPlay(View view) {
@@ -52,11 +36,5 @@ public class MainActivity extends AppCompatActivity {
     public void onSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("lang", Locale.getDefault().toLanguageTag());
-        super.onSaveInstanceState(outState);
     }
 }
