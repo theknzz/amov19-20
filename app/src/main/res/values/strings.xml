@@ -8,8 +8,8 @@
     <string name="cheat">Hint</string>
     <string name="play">Play</string>
     <string name="history">History</string>
-    <string name="settings">Settings</string>
-    <string name="play_menu">Play Menu</string>
+    <string name="settings">Credits</string>
+    <string name="play_menu">AMov 2019/2020</string>
     <string name="mode_1">Mode 1</string>
     <string name="mode_2">Mode 2</string>
     <string name="mode_3">Mode 3</string>
@@ -21,4 +21,8 @@
     <string name="play_again">Play Again</string>
     <string name="change_to_portuguese">Change to Portuguese</string>
     <string name="change_to_english">Change to English</string>
+    <string name="joaquim_santos">Joaquim Santos</string>
+    <string name="henrique_dias">Henrique Dias</string>
+    <string name="andr_coelho">André Coelho</string>
+    <string name="credits">Credits</string>
 </resources>

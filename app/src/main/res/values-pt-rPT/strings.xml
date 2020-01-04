@@ -9,8 +9,8 @@
     <string name="cheat">Ajuda</string>
     <string name="play">Jogar</string>
     <string name="history">Histórico</string>
-    <string name="settings">Definições</string>
-    <string name="play_menu">Menu de Jogo</string>
+    <string name="settings">Créditos</string>
+    <string name="play_menu">AMov 2019/2020</string>
     <string name="mode_1">Modo 1</string>
     <string name="mode_2">Modo 2</string>
     <string name="mode_3">Modo 3</string>
@@ -22,4 +22,8 @@
     <string name="play_again">Voltar a jogar</string>
     <string name="change_to_portuguese">Mudar para Português</string>
     <string name="change_to_english">Mudar para Inglês</string>
+    <string name="joaquim_santos">Joaquim Santos</string>
+    <string name="henrique_dias">Henrique Dias</string>
+    <string name="andr_coelho">André Coelho</string>
+    <string name="credits">Créditos</string>
 </resources>

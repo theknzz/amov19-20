@@ -109,6 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="1" />
 
@@ -117,6 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="2" />
 
@@ -125,6 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="3" />
 
@@ -141,6 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="4" />
 
@@ -149,6 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="5" />
 
@@ -157,6 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="6" />
 
@@ -173,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="7" />
 
@@ -181,6 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="8" />
 
@@ -189,6 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNumberPicker"
                 android:text="9" />
         </LinearLayout>
@@ -203,6 +212,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onCheat"
                 android:text="@string/cheat"
                 android:textSize="12sp" />
@@ -212,6 +222,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onNotes"
                 android:text="@string/notes"
                 android:textSize="12sp" />
@@ -221,6 +232,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:onClick="onChangeMode"
                 android:text="@string/change_mode"
                 android:textSize="12sp" />

@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.GameWonActivity"></activity>
         <activity android:name=".Activities.GameplayActivity" />
-        <activity android:name=".Activities.SettingsActivity" />
+        <activity android:name=".Activities.CreditsActivity" />
         <activity android:name=".Activities.GameHistoryActivity" />
         <activity android:name=".Activities.PlayMenuActivity" />
         <activity android:name=".Activities.MainActivity">

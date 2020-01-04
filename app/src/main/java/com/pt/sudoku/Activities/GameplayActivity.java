@@ -23,6 +23,7 @@ public class GameplayActivity extends AppCompatActivity {
     private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock;
     private GameLogic logic;
     private int level, mode;
+    private Button oldButton;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -89,12 +90,20 @@ public class GameplayActivity extends AppCompatActivity {
     }
 
     public void onNumberPicker(View view) {
+        if (oldButton!=null)
+            oldButton.setSelected(false);
         String btnText = ((Button) view).getText().toString();
+        view.setSelected(true);
+        oldButton = (Button) view;
         logic.setSelectedNumber(Integer.parseInt(btnText));
     }
 
     public void onNotes(View view) {
         logic.switchNotesMode();
+        if (logic.isNotesMode())
+            view.setSelected(true);
+        else
+            view.setSelected(false);
     }
 
     public void onChangeMode(View view) {

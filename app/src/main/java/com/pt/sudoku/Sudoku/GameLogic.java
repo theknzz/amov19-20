@@ -279,4 +279,7 @@ public class GameLogic implements Serializable {
         context.gameFinished();
     }
 
+    public boolean isNotesMode() {
+        return view.isNotesMode();
+    }
 }
