@@ -15,6 +15,7 @@ public class Gameplay extends AppCompatActivity {
     private TextView tvMode, tvClock, tvPlayer, tvLevel, tvPlayerClock, tvWinOutput;
     private BoardView board;
     private int level, mode;
+    private String ip;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -50,6 +51,7 @@ public class Gameplay extends AppCompatActivity {
         FrameLayout flSudokuTable = findViewById(R.id.flSudokuTable);
         level = getIntent().getIntExtra("level", 0);
         mode = getIntent().getIntExtra("mode", 0);
+        ip=getIntent().getStringExtra("ip");
 
         if (savedInstanceState!=null) {
             loadGameState(savedInstanceState);
@@ -79,6 +81,9 @@ public class Gameplay extends AppCompatActivity {
             board = new BoardView(this, level, tvClock, tvWinOutput);
         else if (mode==2)
             board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer, tvWinOutput);
+        else if (mode == 3) {
+            board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer, tvWinOutput, ip);
+        }
     }
 
     public void onNumberPicker(View view) {

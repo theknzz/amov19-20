@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.pt.sudoku.Activities.Gameplay;
 import com.pt.sudoku.Activities.Settings;
 import com.pt.sudoku.Clock.Clock;
 import com.pt.sudoku.Clock.SudokuClock;
@@ -20,6 +22,13 @@ import com.pt.sudoku.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.List;
 import pt.isec.ans.sudokulibrary.Sudoku;
 
@@ -44,6 +53,11 @@ public class BoardView extends View {
     private Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
     private TextView tvWinOutput, tvClock;
     private Dialog winDialog;
+
+    private BufferedReader in;
+    private BufferedWriter out;
+
+
 
 
     public BoardView(Context context, int level, TextView tvClock, TextView tvWinOutput) {
@@ -83,6 +97,92 @@ public class BoardView extends View {
         resolveGame(board.toPrimitiveBoard());
         clock.startClock();
         playerManager.triggerPlayerClock();
+    }
+
+    public BoardView(Context context, int level, TextView tvClock, TextView tvPlayerClock, TextView tvPlayer, TextView tvWinOutput, String ip) {
+        super(context);
+        this.gameMode= 3;
+        this.context = context;
+        this.level = level;
+        this.globalClock = new Clock();
+        this.clock = new SudokuClock(tvClock, globalClock);
+        this.winDialog = new Dialog(context);
+        this.tvWinOutput = tvWinOutput;
+        winDialog.setContentView(R.layout.pop_up_win);
+        this.personalClock = new Clock();
+        this.wrongClock = new Clock();
+        try {
+            Socket socket = new Socket(ip, 9080);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        createPaints();
+        getBoardFromServer();
+        resolveGame(board.toPrimitiveBoard());
+        clock.startClock();
+        Thread receiveThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject json;
+                StringBuilder sb = new StringBuilder();
+                while(true) {
+                    try {
+                        if (in.ready()) {
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                sb = new StringBuilder();
+                                sb.append(in.read());
+                            }
+                            json = new JSONObject(sb.toString());
+
+                            try {
+                                String msg = json.getString("msg");
+                                if(msg.equals("WrongUser")){
+                                    makeToast("Not your turn to play!");
+                                }else if(msg.equals("YourTurn")){
+                                    makeToast("It's now your turn!");
+                                }else if(msg.equals("Switch")){
+                                    makeToast("Your turn is over");
+                                }else if(msg.equals("BadTurn")){
+                                    makeToast("Wrong");
+                                }
+                            }catch (JSONException e){
+                                convert(json.getJSONArray("board"));
+
+                            }
+                        }
+                    }catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void makeToast(String text){
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void getBoardFromServer() {
+        JSONObject strJson;
+        try {
+            char[] data = null;
+            while ((in.read(data)) != -1);
+            String dataStr = new String(data);
+            strJson = new JSONObject(dataStr);
+
+            if (strJson.optInt("result",0) == 1) {
+                JSONArray jsonArray = strJson.getJSONArray("board");
+                int[][] board = convert(jsonArray);
+                createBoard(board);
+            }
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public BoardView(BoardView board, Context context, TextView tvClock, TextView tvWinOutput) {
@@ -128,6 +228,9 @@ public class BoardView extends View {
         clock.startClock();
         playerManager.triggerPlayerClock();
     }
+
+
+
 
     private Clock getGlobalClock() {
         return globalClock;
@@ -282,6 +385,26 @@ public class BoardView extends View {
                         Toast.makeText(context, "can't change initial value", Toast.LENGTH_SHORT).show();
                     else
                         updateNotes(cellX, cellY);
+                } else {
+                    board.addNote(cellX, cellY, selectedNumber);
+                }
+                Toast.makeText(context, playerManager.getActualPlayer().getRightGuesses()+"", Toast.LENGTH_SHORT).show();
+            } else if (gameMode==3) {
+                if (!isNotesMode) {
+                    if (0 > cellX && cellX < 10 && 0 > cellY && cellY < 10 && 0 > selectedNumber && cellX < selectedNumber){
+                            try {
+                                JSONObject json = new JSONObject();
+
+                                json.put("x", cellX);
+                                json.put("y", cellY);
+                                json.put("num", selectedNumber);
+
+                                out.write(json.toString());
+
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
+                    }
                 } else {
                     board.addNote(cellX, cellY, selectedNumber);
                 }
@@ -490,4 +613,5 @@ public class BoardView extends View {
     public Clock getPersonalClock() {
         return personalClock;
     }
+
 }

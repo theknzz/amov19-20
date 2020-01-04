@@ -9,6 +9,7 @@ import com.pt.sudoku.GameRules;
 public class PlayerManager {
     private Player playerA;
     private Player playerB;
+    private Player playerC;
     private TextView tvPlayer, tvPlayerClock;
     private SudokuClock playerClock;
     private boolean isPlayerLocked;
@@ -17,6 +18,7 @@ public class PlayerManager {
     public PlayerManager(Player playerA, Player playerB, TextView tvPlayer, TextView tvPlayerClock, Clock clock) {
         this.playerA = playerA;
         this.playerB = playerB;
+        this.playerC = null;
         this.tvPlayer = tvPlayer;
         this.tvPlayerClock = tvPlayerClock;
         playerClock = new SudokuClock(tvPlayerClock, tvPlayer, this, clock);
@@ -32,6 +34,17 @@ public class PlayerManager {
         this.playerGotRightGuess = manager.isPlayerGotRightGuess();
     }
 
+    public PlayerManager(Player playerA, Player playerB, Player playerC, Clock clock) {
+        this.playerA = playerA;
+        this.playerB = playerB;
+        this.playerC = playerC;
+        playerClock = new SudokuClock(this, clock);
+    }
+
+    private Player getPlayerC() {
+        return this.playerC;
+    }
+
     private Player getPlayerB() {
         return this.playerB;
     }
@@ -39,6 +52,7 @@ public class PlayerManager {
     private Player getPlayerA() {
         return this.playerA;
     }
+
 
 
 
@@ -53,17 +67,31 @@ public class PlayerManager {
             playerA.setPlaying(false);
             playerB.setPlaying(true);
         }
-        else
+        else if(playerB.isPlaying())
         {
-            playerA.setPlaying(true);
             playerB.setPlaying(false);
+            if(playerC == null){
+                playerA.setPlaying(true);
+            }else{
+                playerC.setPlaying(true);
+            }
+        }else if(playerC!=null && playerC.isPlaying()){
+            playerC.setPlaying(false);
+            playerA.setPlaying(true);
         }
-        tvPlayer.setText("Player: " + getActualPlayer().getName());
+        if(tvPlayer!=null) {
+            tvPlayer.setText("Player: " + getActualPlayer().getName());
+        }
         playerClock.resetPlayerClock(tvPlayerClock, tvPlayer, this, GameRules.ROUND_TIME, new Clock());
+
     }
 
     public Player getActualPlayer() {
-        return playerA.isPlaying()? playerA:playerB;
+        if(playerA.isPlaying())
+            return playerA;
+        if (playerB.isPlaying())
+            return playerB;
+        return playerC;
     }
 
     public boolean isPlayerGotRightGuess() {
@@ -95,6 +123,12 @@ public class PlayerManager {
     }
 
     public Player getWinner() {
-        return playerA.getRightGuesses()>playerB.getRightGuesses()?playerA:playerB;
+        if(playerC==null)
+            return playerA.getRightGuesses()>playerB.getRightGuesses() ? playerA:playerB;
+        Player max;
+        max = playerA.getRightGuesses() > playerB.getRightGuesses()? playerA:playerB;
+        return max.getRightGuesses() > playerC.getRightGuesses()?max:playerC;
     }
+
+
 }

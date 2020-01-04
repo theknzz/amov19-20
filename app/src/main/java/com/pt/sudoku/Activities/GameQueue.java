@@ -36,14 +36,19 @@ public class GameQueue extends AppCompatActivity {
 
         intentComm.putExtra("mode", getIntent().getStringExtra("mode"));
 
+        intentComm.putExtra("type", getIntent().getStringExtra("type"));
+
+        intentComm.putExtra("level", getIntent().getIntExtra("level", 8));
+
+
         TextView textView = findViewById(R.id.waitingText);
 
-        if (getIntent().getStringExtra("mode").equals("server")) {
+        if (getIntent().getStringExtra("type").equals("server")) {
 
             textView.setText("connect to:" + getLocalIpAddress());
         }
 
-        if (intentComm.getStringExtra("mode").equals("client")) {
+        if (intentComm.getStringExtra("type").equals("client")) {
             clientDlg();
         }
 
@@ -51,7 +56,7 @@ public class GameQueue extends AppCompatActivity {
             //ContextCompat.startForegroundService(this, intentClient);
             running = true;
 
-            if (intentComm.getStringExtra("mode").equals("server")) {
+            if (intentComm.getStringExtra("type").equals("server")) {
                 startService(intentComm);
             }
         }

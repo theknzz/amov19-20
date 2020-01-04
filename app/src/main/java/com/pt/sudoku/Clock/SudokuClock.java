@@ -24,13 +24,21 @@ public class SudokuClock {
         this.timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, GameRules.ROUND_TIME, clock);
     }
 
+    public SudokuClock(PlayerManager manager, Clock clock) {
+        this.timerRunnable = new ModeThreeClock(timeHandler, manager, GameRules.ROUND_TIME, clock);
+    }
+
     public void startClock() {
         timeHandler.postDelayed(timerRunnable, 0);
     }
 
     public void resetPlayerClock(TextView tvPlayerClock, TextView tvPlayer, PlayerManager manager, int seconds, Clock clock) {
         timeHandler.removeCallbacksAndMessages(timerRunnable);
-        timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, seconds, clock);
+        if(tvPlayerClock == null){
+            timerRunnable = new ModeTwoClock(timeHandler, tvPlayerClock, tvPlayer, manager, seconds, clock);
+        }else {
+            timerRunnable = new ModeThreeClock(timeHandler, manager, seconds, clock);
+        }
         timeHandler.postDelayed(timerRunnable, 0);
     }
 

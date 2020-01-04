@@ -49,47 +49,62 @@ public class PlayMenu extends AppCompatActivity {
     }
 
     public void onChooseType(View view) {
-        Intent intent = new Intent(this, GameQueue.class);
-        String mode = "";
+        String type = "";
 
         switch (((Button) view).getText().toString()) {
             case "server": {
-                mode = "server";
+                type = "server";
+                difficultDialog = new Dialog(this);
+                difficultDialog.setContentView(R.layout.pop_up_start);
+                difficultDialog.show();
                 break;
             }
             case "client": {
-                mode = "client";
+                Intent intent = new Intent(this, GameQueue.class);
+                type = "client";
+                intent.putExtra("type", type);
+                startActivity(intent);
                 break;
             }
         }
-        intent.putExtra("mode", mode);
-        startActivity(intent);
     }
 
     public void onLevelPick(View view) {
 
         Intent intent = new Intent(this, Gameplay.class);
         intent.putExtra("mode", mode);
+        int level = 8;
 
         Button b = (Button) view;
         switch (b.getId()) {
             //button easy
             case R.id.btnEasy:
-                intent.putExtra("level", 6);
+                level = 6;
+                intent.putExtra("level", level);
                 break;
             //button medium
             case R.id.btnMedium:
-                intent.putExtra("level", 8);
+                level = 8;
+                intent.putExtra("level", level);
                 break;
             //button hard
             case R.id.btnHard:
                 //TODO devia ser 12 mas o código do stor fica muito lento por isso ficou 10
-                intent.putExtra("level", 10);
+                level = 10;
+                intent.putExtra("level", level);
                 break;
             default: {
                 difficultDialog.cancel();
             }
         }
+        if(mode==3){
+            Intent queueIntent = new Intent(this, GameQueue.class);
+            queueIntent.putExtra("mode", mode);
+            queueIntent.putExtra("level", level);
+            queueIntent.putExtra("type", "server");
+            startActivity(queueIntent);
+        }
+        else
         startActivity(intent);
     }
 }

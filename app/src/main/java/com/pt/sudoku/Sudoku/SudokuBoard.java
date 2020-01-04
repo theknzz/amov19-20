@@ -2,6 +2,8 @@ package com.pt.sudoku.Sudoku;
 
 import com.pt.sudoku.PlayerContents.PlayerManager;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -179,5 +181,32 @@ public class SudokuBoard {
 
     public void setBoard(List<SudokuCell> board) {
         this.board = board;
+    }
+
+    public int[][] boardToInt(){
+        int[][] boardArray = new int[BOARD_SIZE][BOARD_SIZE];
+        for (int i=0; i < BOARD_SIZE; i++)
+            for (int j=0; j <BOARD_SIZE; j++) {
+                boardArray[i][j] = get(i,j).getValue();
+            }
+        return boardArray;
+    }
+
+    public JSONArray convert(int[][] board) {
+        JSONArray jsonArray = new JSONArray();
+        int rows = board.length,columns = 0;
+        try {
+            for (int r = 0; r < rows; r++) {
+                JSONArray jsonRow = new JSONArray();
+                columns= board[r].length;
+                for (int c=0; c < columns; c++) {
+                    jsonRow.put(board[r][c]);
+                }
+                jsonArray.put(jsonRow);
+            }
+        } catch (Exception e) {
+
+        }
+        return jsonArray;
     }
 }
