@@ -2,6 +2,7 @@ package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -77,12 +78,24 @@ public class Gameplay extends AppCompatActivity {
     }
 
     private void initializeGameMode() {
-        if (mode==1)
+        if (mode==1){
             board = new BoardView(this, level, tvClock, tvWinOutput);
-        else if (mode==2)
+            Log.e("123", "MODE == 1");
+            System.out.println("MODE == 1");
+        }
+        else if (mode==2){
             board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer, tvWinOutput);
+            Log.e("123", "MODE == 2");
+            System.out.println("MODE == 2");
+
+
+        }
         else if (mode == 3) {
             board = new BoardView(this, level, tvClock, tvPlayerClock, tvPlayer, tvWinOutput, ip);
+            Log.e("123", "MODE == 3");
+            System.out.println("MODE == 3");
+
+
         }
     }
 

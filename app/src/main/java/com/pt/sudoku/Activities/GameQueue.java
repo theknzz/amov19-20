@@ -1,6 +1,7 @@
 package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -34,7 +35,7 @@ public class GameQueue extends AppCompatActivity {
 
         intentComm=  new Intent(this, ComunicationBackgroundService.class);
 
-        intentComm.putExtra("mode", getIntent().getStringExtra("mode"));
+        intentComm.putExtra("mode", getIntent().getIntExtra("mode", 3));
 
         intentComm.putExtra("type", getIntent().getStringExtra("type"));
 
@@ -60,6 +61,11 @@ public class GameQueue extends AppCompatActivity {
                 startService(intentComm);
             }
         }
+
+        Intent gameIntent = new Intent(this, Gameplay.class);
+        gameIntent.putExtra("mode", intentComm.getIntExtra("mode", 3));
+        gameIntent.putExtra("ip", intentComm.getStringExtra("ip"));
+        startActivity(gameIntent);
     }
 
     void clientDlg() {

@@ -221,10 +221,6 @@ public class ComunicationBackgroundService extends Service {
 
         threadCiente.start();
         */
-        Intent gameIntent = new Intent(this, Gameplay.class);
-        gameIntent.putExtra("mode", 3);
-        gameIntent.putExtra("ip", clientIP);
-        ActivityCompat.startForegroundService(getApplicationContext(), gameIntent);
         return START_STICKY;
     }
 

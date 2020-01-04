@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -113,8 +114,20 @@ public class BoardView extends View {
         this.wrongClock = new Clock();
         try {
             Socket socket = new Socket(ip, 9080);
+            if(!socket.isConnected()){
+                Log.e("123", "SOCKET NULL");
+
+            }
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            if(in == null){
+                Log.e("123", "IN NULL");
+
+            }
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            if(out == null){
+                Log.e("123", "OUT NULL");
+
+            }
 
 
         } catch (IOException e) {
@@ -170,7 +183,7 @@ public class BoardView extends View {
     private void getBoardFromServer() {
         JSONObject strJson;
         try {
-            char[] data = null;
+            char[] data = new char[200];
             while ((in.read(data)) != -1);
             String dataStr = new String(data);
             strJson = new JSONObject(dataStr);
