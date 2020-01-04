@@ -1,4 +1,4 @@
-package com.pt.sudoku.PlayerContents;
+package com.pt.sudoku.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.pt.sudoku.Activities.GameplayActivity;
 import com.pt.sudoku.R;
 
-public class PlayMenu extends AppCompatActivity {
+public class PlayMenuActivity extends AppCompatActivity {
 
     private Dialog difficultDialog;
     private int mode;

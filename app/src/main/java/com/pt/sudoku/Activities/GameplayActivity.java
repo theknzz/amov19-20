@@ -111,5 +111,5 @@ public class GameplayActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
-    
+
 }

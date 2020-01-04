@@ -3,17 +3,10 @@ package com.pt.sudoku.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 
-import com.pt.sudoku.PlayerContents.PlayMenu;
 import com.pt.sudoku.R;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onPlay(View view) {
-        Intent intent = new Intent(this, PlayMenu.class);
+        Intent intent = new Intent(this, PlayMenuActivity.class);
         startActivity(intent);
     }
 
